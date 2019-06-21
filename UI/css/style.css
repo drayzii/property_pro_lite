@@ -95,10 +95,10 @@ nav .toggle{
         grid-template-columns: 30% 70%;
         margin: 20px 20%;
     }
-    /* .welcome{
+    .welcome{
         padding-top: 100px;
         padding-bottom: 100px;
-    } */
+    }
     
 }
 @media screen and (max-width: 900px){
