@@ -6,7 +6,7 @@ This is a platform where people can create and/or search properties for sale or 
 
 ## Demo
 
-[Property Pro Lite](https://drayzii.github.io/property_pro_lite/UI/)
+[Property Pro Lite](https://drayzii.github.io/property_pro_lite/UI/html)
 
 ---
 
