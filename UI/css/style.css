@@ -257,7 +257,6 @@ button{
     font-size: 1.2rem;
     margin-right: 10px;
     margin-top: 5px;
-    border: 1px #ffffff solid;
 }
 
 .button1{
@@ -268,22 +267,18 @@ button{
 
 .button1:hover{
     cursor: pointer;
-    background-color: #fff;
-    color: #BF3945;
-    border: 1px #BF3945 solid;
+    background-color: rgb(172, 50, 60);
 }
 
 .button2{
-    background-color: #8C1B39;
+    background-color: rgb(177, 35, 73);
     color: #fff;
     transition: all .3s;
 }
 
 .button2:hover{
     cursor: pointer;
-    background-color: #fff;
-    color: #8C1B39;
-    border: 1px #8C1B39 solid;
+    background-color: rgb(151, 30, 63);
 }
 
 .button3{
@@ -292,8 +287,6 @@ button{
 
 .button3:hover{
     cursor: pointer;
-    background-color: #fff;
-    border: 1px #000000 solid;
 }
 
 
