@@ -1,0 +1,39 @@
+{
+  "name": "property_pro_lite",
+  "version": "1.0.0",
+  "description": "This is a platform where people can create and/or search properties for sale or rent",
+  "main": "server/app.js",
+  "scripts": {
+    "build": "babel server -d dist",
+    "start": "npm run build && nodemon dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drayzii/property_pro_lite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drayzii/property_pro_lite/issues"
+  },
+  "homepage": "https://github.com/drayzii/property_pro_lite#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "bcrypt": "^3.0.6",
+    "cloudinary": "^1.14.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "nodemon": "^1.19.1"
+  }
+}
