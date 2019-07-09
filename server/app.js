@@ -1,11 +1,17 @@
-import express from 'express'
+import express from 'express';
 
-const app = express()
+import userRoute from './routes/userRoute';
 
-app.get('/',(req,res)=>{
-    res.send('Hello World')
-})
+const app = express();
 
-const PORT = process.env.PORT || 5000
+app.use(express.json());
 
-app.listen(PORT, ()=> console.log('Ok'))
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.use('/api/v1/auth', userRoute);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log('Ok'));
