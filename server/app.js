@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
+import tokenVerify from './config/checkauth';
 import userRoute from './routes/userRoute';
 import propertyRoute from './routes/propertyRoute';
 
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', userRoute);
-app.use('/api/v1/property', propertyRoute);
+app.use('/api/v1/property', tokenVerify, propertyRoute);
 
 const PORT = process.env.PORT || 5000;
 

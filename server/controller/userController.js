@@ -30,11 +30,7 @@ class user {
         };
         User[id - 1] = newUser;
 
-        const jwtExpiry = 3600;
-
         const token = jsonwebtoken.sign({ email }, jwtKey);
-
-        res.cookie('token', token, { maxAge: jwtExpiry * 1000 });
 
         res.json({
           status: 'success',
@@ -63,11 +59,7 @@ class user {
           });
         }
         if (result) {
-          const jwtExpiry = 3600;
-
           const token = jsonwebtoken.sign({ email }, jwtKey);
-
-          res.cookie('token', token, { maxAge: jwtExpiry * 1000 });
 
           res.json({
             status: 'success',
