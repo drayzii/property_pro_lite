@@ -16,8 +16,8 @@ class property {
   static addProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        res.status(403).json({
-          status: 'failed',
+        res.json({
+          status: 403,
           error: 'Forbidden route',
         });
       } else {
@@ -25,7 +25,7 @@ class property {
         cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
           if (error) {
             res.json({
-              status: 'failed',
+              status: 500,
               error: 'Could not upload image',
             });
           } else {
@@ -46,7 +46,7 @@ class property {
             };
             Property[id - 1] = newProperty;
             res.json({
-              status: 'success',
+              status: 200,
               data: newProperty,
             });
           }

@@ -14,8 +14,8 @@ class user {
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
         res.json({
-          status: 'failed',
-          error: err,
+          status: 500,
+          error: 'Could not encrypt password',
         });
       } else {
         const newUser = {
@@ -33,7 +33,7 @@ class user {
         const token = jsonwebtoken.sign({ email }, jwtKey);
 
         res.json({
-          status: 'success',
+          status: 200,
           token,
           data: newUser,
         });
@@ -47,14 +47,14 @@ class user {
     const oneUser = User.find(theuser => theuser.email === email);
     if (!oneUser) {
       res.json({
-        status: 'failed',
+        status: 400,
         error: 'User not found',
       });
     } else {
       bcrypt.compare(password, oneUser.password, (err, result) => {
         if (err) {
           res.json({
-            status: 'failed',
+            status: 500,
             error: 'Error decrypting Password',
           });
         }
@@ -62,7 +62,7 @@ class user {
           const token = jsonwebtoken.sign({ email }, jwtKey);
 
           res.json({
-            status: 'success',
+            status: 200,
             token,
             data: oneUser,
           });
