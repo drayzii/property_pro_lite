@@ -54,6 +54,22 @@ class property {
       }
     });
   }
+  static markAsSold(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const theProperty = Property.find(oneProperty => oneProperty.id === id);
+    if (!theProperty) {
+      res.json({
+        status: 'failed',
+        error: 'Property not Found',
+      });
+    } else {
+      theProperty.status = 'Sold';
+      res.json({
+        status: 'success',
+        data: theProperty,
+      });
+    }
+  }
 }
 
 export default property;

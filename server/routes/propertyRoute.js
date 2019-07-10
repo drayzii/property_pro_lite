@@ -9,5 +9,6 @@ router.use(fileupload({
 }));
 
 router.post('/', propertyController.addProperty);
+router.patch('/:id/sold', propertyController.markAsSold);
 
 export default router;
