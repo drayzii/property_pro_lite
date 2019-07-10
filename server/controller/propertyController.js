@@ -59,12 +59,12 @@ class property {
     const oneProperty = Property.find(theProperty => theProperty.id === id);
     if (!oneProperty) {
       res.json({
-        status: 'failed',
+        status: 400,
         error: 'Property not Found',
       });
     } else {
       res.json({
-        status: 'success',
+        status: 200,
         data: oneProperty,
       });
     }
