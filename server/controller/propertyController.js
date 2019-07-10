@@ -58,13 +58,13 @@ class property {
     const id = parseInt(req.params.id, 10) - 1;
     if (typeof Property[id] === 'undefined' || Property[id] === null) {
       res.json({
-        status: 'failed',
+        status: 400,
         error: 'Property not Found',
       });
     } else {
       delete Property[id];
       res.json({
-        status: 'success',
+        status: 200,
         data: {
           message: 'Property deleted successfully',
         },
