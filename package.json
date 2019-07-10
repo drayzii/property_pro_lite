@@ -4,6 +4,7 @@
   "description": "This is a platform where people can create and/or search properties for sale or rent",
   "main": "server/app.js",
   "scripts": {
+    "test": "mocha --require @babel/register ./server/test/*.js --exit",
     "build": "babel server -d dist",
     "start": "npm run build && nodemon dist/app.js"
   },
@@ -22,11 +23,14 @@
     "@hapi/joi": "^15.1.0",
     "babel-cli": "^6.26.0",
     "bcrypt": "^3.0.6",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cloudinary": "^1.14.0",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.5",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.1.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
