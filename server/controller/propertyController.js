@@ -56,10 +56,10 @@ class property {
   }
   static updateProperty(req, res) {
     const id = parseInt(req.params.id, 10);
-    const theproperty = Property.find(oneProperty => oneProperty.id === id);
-    if (!theproperty) {
+    const theProperty = Property.find(oneProperty => oneProperty.id === id);
+    if (!theProperty) {
       res.json({
-        status: 'failed',
+        status: 'error',
         error: 'Could not Update Property',
       });
     } else {
@@ -68,34 +68,34 @@ class property {
         cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
           if (error) {
             res.json({
-              status: 'failed',
+              status: 'error',
               error: 'Could not upload image',
             });
           } else {
-            theproperty.image_url = result.url;
+            theProperty.image_url = result.url;
           }
         });
       }
       const {
         type, state, city, address, price,
       } = req.body;
-      theproperty.type = type;
-      theproperty.state = state;
-      theproperty.city = city;
-      theproperty.address = address;
-      theproperty.price = price;
+      theProperty.type = type;
+      theProperty.state = state;
+      theProperty.city = city;
+      theProperty.address = address;
+      theProperty.price = price;
 
       res.json({
-        status: 'true',
+        status: 'success',
         data: {
-          id: theproperty.id,
-          status: theproperty.status,
-          type: theproperty.type,
-          state: theproperty.state,
-          city: theproperty.city,
-          address: theproperty.address,
-          price: theproperty.price,
-          image_url: theproperty.image_url,
+          id: theProperty.id,
+          status: theProperty.status,
+          type: theProperty.type,
+          state: theProperty.state,
+          city: theProperty.city,
+          address: theProperty.address,
+          price: theProperty.price,
+          image_url: theProperty.image_url,
         },
       });
     }
