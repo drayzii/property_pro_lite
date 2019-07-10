@@ -17,6 +17,7 @@
     "rules": {
         "linebreak-style": 0,
         "no-trailing-spaces": 0,
-        "lines-between-class-members": 0
+        "lines-between-class-members": 0,
+        "no-lonely-if":"off"
     }
 }

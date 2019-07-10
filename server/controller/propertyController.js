@@ -87,10 +87,33 @@ class property {
     }
   }
   static viewAllProperties(req, res) {
-    res.json({
-      status: 200,
-      data: Property,
-    });
+    if (req.query.type) {
+      const { type } = req.query;
+      const typeProperties = Property.filter(theProperties => theProperties.type === type);
+      if (!typeProperties) {
+        res.json({
+          status: 400,
+          error: 'No properties matching the entered type',
+        });
+      } else {
+        res.json({
+          status: 200,
+          data: typeProperties,
+        });
+      }
+    } else {
+      if (Property.length === 0) {
+        res.json({
+          status: 400,
+          error: 'No properties to show',
+        });
+      } else {
+        res.json({
+          status: 200,
+          data: Property,
+        });
+      }
+    }
   }
   static updateProperty(req, res) {
     const id = parseInt(req.params.id, 10);
