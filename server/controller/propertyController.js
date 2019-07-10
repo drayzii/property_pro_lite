@@ -56,7 +56,7 @@ class property {
   }
   static viewAllProperties(req, res) {
     res.json({
-      status: 'success',
+      status: 200,
       data: Property,
     });
   }
