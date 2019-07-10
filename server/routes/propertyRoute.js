@@ -9,5 +9,6 @@ router.use(fileupload({
 }));
 
 router.post('/', propertyController.addProperty);
+router.get('/:id', propertyController.viewSpecificProperty);
 
 export default router;

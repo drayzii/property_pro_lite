@@ -54,6 +54,21 @@ class property {
       }
     });
   }
+  static viewSpecificProperty(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const oneProperty = Property.find(theProperty => theProperty.id === id);
+    if (!oneProperty) {
+      res.json({
+        status: 'failed',
+        error: 'Property not Found',
+      });
+    } else {
+      res.json({
+        status: 'success',
+        data: oneProperty,
+      });
+    }
+  }
 }
 
 export default property;
