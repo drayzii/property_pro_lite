@@ -12,5 +12,6 @@ router.post('/', propertyController.addProperty);
 router.delete('/:id', propertyController.deleteProperty);
 router.get('/:id', propertyController.viewSpecificProperty);
 router.get('/', propertyController.viewAllProperties);
+router.patch('/:id', propertyController.updateProperty);
 
 export default router;
