@@ -59,7 +59,7 @@ class property {
     const theProperty = Property.find(oneProperty => oneProperty.id === id);
     if (!theProperty) {
       res.json({
-        status: 'error',
+        status: 400,
         error: 'Could not Update Property',
       });
     } else {
@@ -68,7 +68,7 @@ class property {
         cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
           if (error) {
             res.json({
-              status: 'error',
+              status: 500,
               error: 'Could not upload image',
             });
           } else {
@@ -86,7 +86,7 @@ class property {
       theProperty.price = price;
 
       res.json({
-        status: 'success',
+        status: 200,
         data: {
           id: theProperty.id,
           status: theProperty.status,
