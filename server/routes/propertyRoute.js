@@ -9,5 +9,6 @@ router.use(fileupload({
 }));
 
 router.post('/', propertyController.addProperty);
+router.delete('/:id', propertyController.deleteProperty);
 
 export default router;

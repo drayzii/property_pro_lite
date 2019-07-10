@@ -54,6 +54,23 @@ class property {
       }
     });
   }
+  static deleteProperty(req, res) {
+    const id = parseInt(req.params.id, 10) - 1;
+    if (typeof Property[id] === 'undefined' || Property[id] === null) {
+      res.json({
+        status: 'failed',
+        error: 'Property not Found',
+      });
+    } else {
+      delete Property[id];
+      res.json({
+        status: 'success',
+        data: {
+          message: 'Property deleted successfully',
+        },
+      });
+    }
+  }
 }
 
 export default property;
