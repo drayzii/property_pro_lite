@@ -54,6 +54,12 @@ class property {
       }
     });
   }
+  static viewAllProperties(req, res) {
+    res.json({
+      status: 'success',
+      data: Property,
+    });
+  }
 }
 
 export default property;
