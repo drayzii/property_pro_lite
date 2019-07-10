@@ -138,6 +138,22 @@ class property {
       });
     }
   }
+  static markAsSold(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const theProperty = Property.find(oneProperty => oneProperty.id === id);
+    if (!theProperty) {
+      res.json({
+        status: 400,
+        error: 'Property not Found',
+      });
+    } else {
+      theProperty.status = 'Sold';
+      res.json({
+        status: 200,
+        data: theProperty,
+      });
+    }
+  }
 }
 
 
