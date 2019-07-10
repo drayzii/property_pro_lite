@@ -18,6 +18,7 @@
         "linebreak-style": 0,
         "no-trailing-spaces": 0,
         "lines-between-class-members": 0,
-        "no-lonely-if":"off"
+        "no-lonely-if":"off",
+        "newline-per-chained-call":"off"
     }
 }

@@ -19,11 +19,12 @@
   },
   "homepage": "https://github.com/drayzii/property_pro_lite#readme",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "babel-cli": "^6.26.0",
     "bcrypt": "^3.0.6",
-    "express": "^4.17.1",
     "cloudinary": "^1.14.0",
     "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
     "express-fileupload": "^1.1.5",
     "jsonwebtoken": "^8.5.1"
   },
