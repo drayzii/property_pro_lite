@@ -86,6 +86,13 @@ class property {
       });
     }
   }
+  static viewAllProperties(req, res) {
+    res.json({
+      status: 200,
+      data: Property,
+    });
+  }
 }
+
 
 export default property;
