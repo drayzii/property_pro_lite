@@ -18,6 +18,7 @@ class user {
           error: 'Could not encrypt password',
         });
       } else {
+        const isAdmin = false;
         const newUser = {
           id,
           email,
@@ -26,7 +27,7 @@ class user {
           password: hash,
           phoneNumber,
           address,
-          isAdmin: false,
+          isAdmin,
         };
         User[id - 1] = newUser;
 
@@ -34,8 +35,16 @@ class user {
 
         res.json({
           status: 200,
-          token,
-          data: newUser,
+          data: {
+            token,
+            id,
+            email,
+            firstname,
+            lastname,
+            phoneNumber,
+            address,
+            isAdmin,
+          },
         });
       }
     });
@@ -63,8 +72,16 @@ class user {
 
           res.json({
             status: 200,
-            token,
-            data: oneUser,
+            data: {
+              token,
+              id: oneUser.id,
+              email: oneUser.email,
+              firstname: oneUser.firstname,
+              lastname: oneUser.lastname,
+              phoneNumber: oneUser.phoneNumber,
+              address: oneUser.address,
+              isAdmin: oneUser.isAdmin,
+            },
           });
         }
       });
