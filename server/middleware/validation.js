@@ -18,7 +18,7 @@ class validation {
     });
     schema.validate(req.body, (err) => {
       if (err) {
-        res.json({
+        res.status(422).json({
           status: 422,
           error: err.details[0].message,
         });
@@ -34,7 +34,7 @@ class validation {
     });
     schema.validate({ email: req.body.email }, (err) => {
       if (err) {
-        res.json({
+        res.status(422).json({
           status: 422,
           error: err.details[0].message,
         });
@@ -50,7 +50,7 @@ class validation {
     });
     schema.validate({ password: req.body.password }, (err) => {
       if (err) {
-        res.json({
+        res.status(422).json({
           status: 422,
           error: err.details[0].message,
         });
@@ -74,7 +74,7 @@ class validation {
     });
     schema.validate(req.body, (err) => {
       if (err) {
-        res.json({
+        res.status(422).json({
           status: 422,
           error: err.details[0].message,
         });

@@ -40,8 +40,8 @@ class user {
 
           const token = jsonwebtoken.sign({ email }, jwtKey);
 
-          res.json({
-            status: 200,
+          res.status(201).json({
+            status: 201,
             data: {
               token,
               id,

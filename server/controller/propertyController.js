@@ -63,8 +63,8 @@ class property {
       });
     } else {
       delete Property[id];
-      res.status(204).json({
-        status: 204,
+      res.status(202).json({
+        status: 202,
         data: {
           message: 'Property deleted successfully',
         },
@@ -90,7 +90,7 @@ class property {
     if (req.query.type) {
       const { type } = req.query;
       const typeProperties = Property.filter(theProperties => theProperties.type === type);
-      if (!typeProperties) {
+      if (typeProperties.length === 0) {
         res.status(404).json({
           status: 404,
           error: 'No properties matching the entered type',
