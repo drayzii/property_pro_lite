@@ -16,6 +16,13 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', userRoute);
 app.use('/api/v1/property', tokenVerify, propertyRoute);
 
+app.use((req, res) => {
+  res.status(404).json({
+    status: 404,
+    error: 'Not Found',
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log('Ok'));
