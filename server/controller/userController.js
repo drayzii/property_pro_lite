@@ -11,7 +11,6 @@ class user {
     const {
       email, firstname, lastname, password, phoneNumber, address,
     } = req.body;
-<<<<<<< HEAD
     const oneUser = User.find(theuser => theuser.email === email);
     if (oneUser) {
       res.status(401).json({
@@ -26,66 +25,37 @@ class user {
             error: 'Could not encrypt password',
           });
         } else {
+          const isAdmin = false;
           const newUser = {
-=======
-    bcrypt.hash(password, 10, (err, hash) => {
-      if (err) {
-        res.json({
-          status: 500,
-          error: 'Could not encrypt password',
-        });
-      } else {
-        const isAdmin = false;
-        const newUser = {
-          id,
-          email,
-          firstname,
-          lastname,
-          password: hash,
-          phoneNumber,
-          address,
-          isAdmin,
-        };
-        User[id - 1] = newUser;
-
-        const token = jsonwebtoken.sign({ email }, jwtKey);
-
-        res.json({
-          status: 200,
-          data: {
-            token,
->>>>>>> bg-not-return-password-167222022
             id,
             email,
             firstname,
             lastname,
-<<<<<<< HEAD
             password: hash,
             phoneNumber,
             address,
-            isAdmin: false,
+            isAdmin,
           };
           User[id - 1] = newUser;
-  
+
           const token = jsonwebtoken.sign({ email }, jwtKey);
-  
-          res.status(201).json({
-            status: 201,
-            token,
-            data: newUser,
+
+          res.json({
+            status: 200,
+            data: {
+              token,
+              id,
+              email,
+              firstname,
+              lastname,
+              phoneNumber,
+              address,
+              isAdmin,
+            },
           });
         }
       });
     }
-=======
-            phoneNumber,
-            address,
-            isAdmin,
-          },
-        });
-      }
-    });
->>>>>>> bg-not-return-password-167222022
   }
   static signIn(req, res) {
     const {
