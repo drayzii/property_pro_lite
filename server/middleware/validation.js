@@ -10,7 +10,7 @@ class validation {
       lastname: Joi.string().alphanum().min(3).max(30).required()
         .error(() => 'You have to enter a valid name'),
       password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
-        .error(() => 'You have to enter a valid password with more than 6 characters'),
+        .error(() => 'You have to enter a valid password with 6 or more characters'),
       phoneNumber: Joi.string().regex(/^[0-9+-]{10,18}$/).required()
         .error(() => 'You have to enter a valid phone number'),
       address: Joi.string().required()
@@ -18,7 +18,7 @@ class validation {
     });
     schema.validate(req.body, (err) => {
       if (err) {
-        res.json({
+        res.status(422).json({
           status: 422,
           error: err.details[0].message,
         });
@@ -46,7 +46,7 @@ class validation {
   static passwordValidation(req, res, next) {
     const schema = Joi.object().keys({
       password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
-        .error(() => 'You have to enter a valid password with more than 6 characters'),
+        .error(() => 'You have to enter a valid password with 6 or more characters'),
     });
     schema.validate({ password: req.body.password }, (err) => {
       if (err) {

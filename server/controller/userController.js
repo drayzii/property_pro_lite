@@ -66,6 +66,11 @@ class user {
             token,
             data: oneUser,
           });
+        } else {
+          res.json({
+            status: 400,
+            error: 'Wrong Password',
+          });
         }
       });
     }

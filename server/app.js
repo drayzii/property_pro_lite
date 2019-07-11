@@ -1,11 +1,12 @@
 import express from 'express';
-
+import bodyparser from 'body-parser';
 import tokenVerify from './config/checkauth';
 import userRoute from './routes/userRoute';
 import propertyRoute from './routes/propertyRoute';
 
 const app = express();
 
+app.use(bodyparser.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -18,3 +19,5 @@ app.use('/api/v1/property', tokenVerify, propertyRoute);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log('Ok'));
+
+export default app;

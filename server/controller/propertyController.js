@@ -21,36 +21,56 @@ class property {
           error: 'Forbidden route',
         });
       } else {
-        const file = req.files.photo;
-        cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
-          if (error) {
-            res.json({
-              status: 500,
-              error: 'Could not upload image',
-            });
-          } else {
-            const id = Property.length + 1;
-            const {
-              type, state, city, address, price,
-            } = req.body;
-            const newProperty = {
-              id,
-              status: 'Available',
-              type,
-              state,
-              city,
-              address,
-              price,
-              created_on: Date.now,
-              image_url: result.url,
-            };
-            Property[id - 1] = newProperty;
-            res.json({
-              status: 200,
-              data: newProperty,
-            });
-          }
-        });
+        const id = Property.length + 1;
+        const {
+          type, state, city, address, price,
+        } = req.body;
+
+        
+        if (process.env.NODE_ENV !== 'test') {
+          const file = req.files.photo;
+          cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
+            if (error) {
+              res.json({
+                status: 500,
+                error: 'Could not upload image',
+              });
+            } else {
+              const newProperty = {
+                id,
+                status: 'Available',
+                type,
+                state,
+                city,
+                address,
+                price,
+                created_on: Date.now,
+                image_url: result.url,
+              };
+              Property[id - 1] = newProperty;
+              res.json({
+                status: 200,
+                data: newProperty,
+              });
+            }
+          });
+        } else {
+          const newProperty = {
+            id,
+            status: 'Available',
+            type,
+            state,
+            city,
+            address,
+            price,
+            created_on: Date.now,
+          };
+          Property[id - 1] = newProperty;
+          res.json({
+            status: 200,
+            data: newProperty,
+          });
+        }
       }
     });
   }
