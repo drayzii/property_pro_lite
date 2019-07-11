@@ -11,34 +11,42 @@ class user {
     const {
       email, firstname, lastname, password, phoneNumber, address,
     } = req.body;
-    bcrypt.hash(password, 10, (err, hash) => {
-      if (err) {
-        res.json({
-          status: 500,
-          error: 'Could not encrypt password',
-        });
-      } else {
-        const newUser = {
-          id,
-          email,
-          firstname,
-          lastname,
-          password: hash,
-          phoneNumber,
-          address,
-          isAdmin: false,
-        };
-        User[id - 1] = newUser;
-
-        const token = jsonwebtoken.sign({ email }, jwtKey);
-
-        res.json({
-          status: 200,
-          token,
-          data: newUser,
-        });
-      }
-    });
+    const oneUser = User.find(theuser => theuser.email === email);
+    if (oneUser) {
+      res.status(401).json({
+        status: 401,
+        error: 'Email already exists',
+      });
+    } else {
+      bcrypt.hash(password, 10, (err, hash) => {
+        if (err) {
+          res.json({
+            status: 500,
+            error: 'Could not encrypt password',
+          });
+        } else {
+          const newUser = {
+            id,
+            email,
+            firstname,
+            lastname,
+            password: hash,
+            phoneNumber,
+            address,
+            isAdmin: false,
+          };
+          User[id - 1] = newUser;
+  
+          const token = jsonwebtoken.sign({ email }, jwtKey);
+  
+          res.json({
+            status: 200,
+            token,
+            data: newUser,
+          });
+        }
+      });
+    }
   }
   static signIn(req, res) {
     const {
