@@ -16,7 +16,7 @@ class property {
   static addProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        res.json({
+        res.status(403).json({
           status: 403,
           error: 'Forbidden route',
         });
@@ -24,7 +24,7 @@ class property {
         const file = req.files.photo;
         cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
           if (error) {
-            res.json({
+            res.status(500).json({
               status: 500,
               error: 'Could not upload image',
             });
@@ -45,8 +45,8 @@ class property {
               image_url: result.url,
             };
             Property[id - 1] = newProperty;
-            res.json({
-              status: 200,
+            res.status(201).json({
+              status: 201,
               data: newProperty,
             });
           }
@@ -57,13 +57,13 @@ class property {
   static deleteProperty(req, res) {
     const id = parseInt(req.params.id, 10) - 1;
     if (typeof Property[id] === 'undefined' || Property[id] === null) {
-      res.json({
-        status: 400,
+      res.status(404).json({
+        status: 404,
         error: 'Property not Found',
       });
     } else {
       delete Property[id];
-      res.json({
+      res.status(200).json({
         status: 200,
         data: {
           message: 'Property deleted successfully',
@@ -75,12 +75,12 @@ class property {
     const id = parseInt(req.params.id, 10);
     const oneProperty = Property.find(theProperty => theProperty.id === id);
     if (!oneProperty) {
-      res.json({
-        status: 400,
+      res.status(404).json({
+        status: 404,
         error: 'Property not Found',
       });
     } else {
-      res.json({
+      res.status(200).json({
         status: 200,
         data: oneProperty,
       });
@@ -91,24 +91,24 @@ class property {
       const { type } = req.query;
       const typeProperties = Property.filter(theProperties => theProperties.type === type);
       if (!typeProperties) {
-        res.json({
-          status: 400,
+        res.status(404).json({
+          status: 404,
           error: 'No properties matching the entered type',
         });
       } else {
-        res.json({
+        res.status(200).json({
           status: 200,
           data: typeProperties,
         });
       }
     } else {
       if (Property.length === 0) {
-        res.json({
-          status: 400,
+        res.status(404).json({
+          status: 404,
           error: 'No properties to show',
         });
       } else {
-        res.json({
+        res.status(200).json({
           status: 200,
           data: Property,
         });
@@ -119,16 +119,16 @@ class property {
     const id = parseInt(req.params.id, 10);
     const theProperty = Property.find(oneProperty => oneProperty.id === id);
     if (!theProperty) {
-      res.json({
-        status: 400,
-        error: 'Could not Update Property',
+      res.status(404).json({
+        status: 404,
+        error: 'Could not find Property',
       });
     } else {
       if (req.files.photo) {
         const file = req.files.photo;
         cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
           if (error) {
-            res.json({
+            res.status(500).json({
               status: 500,
               error: 'Could not upload image',
             });
@@ -146,7 +146,7 @@ class property {
       theProperty.address = address;
       theProperty.price = price;
 
-      res.json({
+      res.status(200).json({
         status: 200,
         data: {
           id: theProperty.id,
@@ -165,13 +165,13 @@ class property {
     const id = parseInt(req.params.id, 10);
     const theProperty = Property.find(oneProperty => oneProperty.id === id);
     if (!theProperty) {
-      res.json({
-        status: 400,
+      res.status(404).json({
+        status: 404,
         error: 'Property not Found',
       });
     } else {
       theProperty.status = 'Sold';
-      res.json({
+      res.status(200).json({
         status: 200,
         data: theProperty,
       });

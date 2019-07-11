@@ -7,7 +7,7 @@ const verify = (req, res, next) => {
     next();
   } else {
     res.status(403).json({
-      status: 'failed',
+      status: 403,
       error: 'Forbidden route',
     });
   }

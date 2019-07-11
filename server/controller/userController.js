@@ -13,7 +13,7 @@ class user {
     } = req.body;
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
-        res.json({
+        res.status(500).json({
           status: 500,
           error: 'Could not encrypt password',
         });
@@ -32,8 +32,8 @@ class user {
 
         const token = jsonwebtoken.sign({ email }, jwtKey);
 
-        res.json({
-          status: 200,
+        res.status(201).json({
+          status: 201,
           token,
           data: newUser,
         });
@@ -46,14 +46,14 @@ class user {
     } = req.body;
     const oneUser = User.find(theuser => theuser.email === email);
     if (!oneUser) {
-      res.json({
-        status: 400,
+      res.status(404).json({
+        status: 404,
         error: 'User not found',
       });
     } else {
       bcrypt.compare(password, oneUser.password, (err, result) => {
         if (err) {
-          res.json({
+          res.status(500).json({
             status: 500,
             error: 'Error decrypting Password',
           });
@@ -61,7 +61,7 @@ class user {
         if (result) {
           const token = jsonwebtoken.sign({ email }, jwtKey);
 
-          res.json({
+          res.status(200).json({
             status: 200,
             token,
             data: oneUser,
