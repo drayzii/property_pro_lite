@@ -63,8 +63,8 @@ class property {
       });
     } else {
       delete Property[id];
-      res.status(200).json({
-        status: 200,
+      res.status(204).json({
+        status: 204,
         data: {
           message: 'Property deleted successfully',
         },
@@ -146,8 +146,8 @@ class property {
       theProperty.address = address;
       theProperty.price = price;
 
-      res.status(200).json({
-        status: 200,
+      res.status(202).json({
+        status: 202,
         data: {
           id: theProperty.id,
           status: theProperty.status,
@@ -171,8 +171,8 @@ class property {
       });
     } else {
       theProperty.status = 'Sold';
-      res.status(200).json({
-        status: 200,
+      res.status(202).json({
+        status: 202,
         data: theProperty,
       });
     }
