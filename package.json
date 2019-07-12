@@ -5,9 +5,9 @@
   "main": "server/app.js",
   "scripts": {
     "test": "NODE_ENV=test nyc mocha --require @babel/register ./server/test/*.js --timeout 15000 --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=text-lcov | codeclimate-test-reporter",
     "build": "babel server -d dist",
-    "start": "npm run build && node dist/app.js",
+    "start": "NODE_ENV=development npm run build && node dist/app.js",
     "dev": "nodemon --exec babel-node ./server/app.js"
   },
   "repository": {
@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.5.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "codeclimate-test-reporter": "^0.5.1",
     "coveralls": "^3.0.5",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
