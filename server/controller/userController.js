@@ -92,7 +92,7 @@ class user {
             },
           });
         } else {
-          res.json({
+          res.status(400).json({
             status: 400,
             error: 'Wrong Password',
           });
