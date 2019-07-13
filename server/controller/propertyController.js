@@ -45,7 +45,7 @@ class property {
                 created_on: Date.now,
                 image_url: result.url,
               };
-              Property[id - 1] = newProperty;
+              Property.push(newProperty);
               res.status(201).json({
                 status: 201,
                 data: newProperty,
@@ -63,7 +63,7 @@ class property {
             price,
             created_on: Date.now,
           };
-          Property[id - 1] = newProperty;
+          Property.push(newProperty);
           res.status(201).json({
             status: 201,
             data: newProperty,

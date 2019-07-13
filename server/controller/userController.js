@@ -36,7 +36,7 @@ class user {
             address,
             isAdmin,
           };
-          User[id - 1] = newUser;
+          User.push(newUser);
 
           const token = jsonwebtoken.sign({ email }, jwtKey);
 
