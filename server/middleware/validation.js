@@ -83,6 +83,30 @@ class validation {
       }
     });
   }
+  static updateValidation(req, res, next) {
+    const schema = Joi.object().keys({
+      type: Joi.string().min(3).max(30).optional()
+        .error(() => 'You have to enter a valid type. Example: flat, mini-flat'),
+      state: Joi.string().alphanum().min(3).max(30).optional()
+        .error(() => 'You have to enter a valid state. Example: Kigali'),
+      city: Joi.string().alphanum().min(3).max(30).optional()
+        .error(() => 'You have to enter a valid city. Example: Kigali'),
+      address: Joi.string().min(3).max(30).optional()
+        .error(() => 'You have to enter a valid address. Example: KN 3 RD'),
+      price: Joi.number().integer().optional()
+        .error(() => 'The price has to be a valid number. Example: 50000000'),
+    });
+    schema.validate(req.body, (err) => {
+      if (err) {
+        res.status(422).json({
+          status: 422,
+          error: err.details[0].message,
+        });
+      } else {
+        next();
+      }
+    });
+  }
 }
 
 export default validation;

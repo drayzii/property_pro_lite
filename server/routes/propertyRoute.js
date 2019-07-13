@@ -14,6 +14,6 @@ router.delete('/:id', propertyController.deleteProperty);
 router.get('/:id', propertyController.viewSpecificProperty);
 router.get('/', propertyController.viewAllProperties);
 router.patch('/:id/sold', propertyController.markAsSold);
-router.patch('/:id', validation.propertyValidation, propertyController.updateProperty);
+router.patch('/:id', validation.updateValidation, propertyController.updateProperty);
 
 export default router;

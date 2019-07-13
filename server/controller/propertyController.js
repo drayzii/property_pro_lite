@@ -25,33 +25,35 @@ class property {
         const {
           type, state, city, address, price,
         } = req.body;
-        if (process.env.NODE_ENV !== 'test') {
-          const file = req.files.photo;
-          cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
-            if (error) {
-              res.status(500).json({
-                status: 500,
-                error: 'Could not upload image',
-              });
-            } else {
-              const newProperty = {
-                id,
-                status: 'Available',
-                type,
-                state,
-                city,
-                address,
-                price,
-                created_on: Date.now,
-                image_url: result.url,
-              };
-              Property[id - 1] = newProperty;
-              res.status(201).json({
-                status: 201,
-                data: newProperty,
-              });
-            }
-          });
+        if (req.files) {
+          if (process.env.NODE_ENV !== 'test') {
+            const file = req.files.photo;
+            cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
+              if (error) {
+                res.status(500).json({
+                  status: 500,
+                  error: 'Could not upload image',
+                });
+              } else {
+                const newProperty = {
+                  id,
+                  status: 'Available',
+                  type,
+                  state,
+                  city,
+                  address,
+                  price,
+                  created_on: Date.now,
+                  image_url: result.url,
+                };
+                Property[id - 1] = newProperty;
+                res.status(201).json({
+                  status: 201,
+                  data: newProperty,
+                });
+              }
+            });
+          }
         } else {
           const newProperty = {
             id,
@@ -176,27 +178,39 @@ class property {
             error: 'Could not find Property',
           });
         } else {
-          if (process.env.NODE_ENV !== 'test') {
-            const file = req.files.photo;
-            cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
-              if (error) {
-                res.status(500).json({
-                  status: 500,
-                  error: 'Could not upload image',
-                });
-              } else {
-                theProperty.image_url = result.url;
-              }
-            });
+          if (req.files) {
+            if (process.env.NODE_ENV !== 'test') {
+              const file = req.files.photo;
+              cloudinary.uploader.upload(file.tempFilePath, (error, result) => {
+                if (error) {
+                  res.status(500).json({
+                    status: 500,
+                    error: 'Could not upload image',
+                  });
+                } else {
+                  theProperty.image_url = result.url;
+                }
+              });
+            }
           }
           const {
             type, state, city, address, price,
           } = req.body;
-          theProperty.type = type;
-          theProperty.state = state;
-          theProperty.city = city;
-          theProperty.address = address;
-          theProperty.price = price;
+          if (typeof type !== 'undefined') {
+            theProperty.type = type;
+          }
+          if (typeof state !== 'undefined') {
+            theProperty.state = state;
+          }
+          if (typeof city !== 'undefined') {
+            theProperty.city = city;
+          }
+          if (typeof address !== 'undefined') {
+            theProperty.address = address;
+          }
+          if (typeof price !== 'undefined') {
+            theProperty.price = price;
+          }
 
           res.status(202).json({
             status: 202,
