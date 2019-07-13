@@ -47,6 +47,25 @@ describe('/No token', () => {
       });
   });
 });
+describe('/All Properties', () => {
+  before('should generate token', (done) => {
+    token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+    done();
+  });
+  it('should return 404 if none', (done) => {
+    chai.request(app)
+      .get('/api/v1/property')
+      .set('authorization', `Bearer ${token}`)
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(404);
+        return done();
+      });
+  });
+});
 describe('/Authentication', () => {
   describe('/Sign Up', () => {
     it('should create a new user', (done) => {
