@@ -13,24 +13,13 @@ cloudinary.config({
 
 
 class property {
-  static notFound(msg) {
-    return res.status(404).json({
-      status: 404,
-      error: msg,
-    });
-  } 
-  
-  static forbiddenRoute(msg) {
-    return res.status(404).json({
-      status: 404,
-      error: 'Forbidden Route',
-    });
-  }
-
   static addProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         const id = Property.length + 1;
         const {
@@ -86,11 +75,17 @@ class property {
   static deleteProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         const id = parseInt(req.params.id, 10) - 1;
         if (typeof Property[id] === 'undefined' || Property[id] === null) {
-          notFound('Property not Found');
+          res.status(404).json({
+            status: 404,
+            error: 'Property not Found',
+          });
         } else {
           delete Property[id];
           res.status(202).json({
@@ -106,12 +101,18 @@ class property {
   static viewSpecificProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         const id = parseInt(req.params.id, 10);
         const oneProperty = Property.find(theProperty => theProperty.id === id);
         if (!oneProperty) {
-          notFound('Property not Found');
+          res.status(404).json({
+            status: 404,
+            error: 'Property not Found',
+          });
         } else {
           res.status(200).json({
             status: 200,
@@ -124,13 +125,19 @@ class property {
   static viewAllProperties(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         if (req.query.type) {
           const { type } = req.query;
           const typeProperties = Property.filter(theProperties => theProperties.type === type);
           if (typeProperties.length === 0) {
-            notFound('No Properties matching the entered type');
+            res.status(404).json({
+              status: 404,
+              error: 'No properties matching the entered type',
+            });
           } else {
             res.status(200).json({
               status: 200,
@@ -139,7 +146,10 @@ class property {
           }
         } else {
           if (Property.length === 0) {
-            notFound('No Properties to show');
+            res.status(404).json({
+              status: 404,
+              error: 'No properties to show',
+            });
           } else {
             res.status(200).json({
               status: 200,
@@ -153,12 +163,18 @@ class property {
   static updateProperty(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         const id = parseInt(req.params.id, 10);
         const theProperty = Property.find(oneProperty => oneProperty.id === id);
         if (!theProperty) {
-          notFound('Could not find property');
+          res.status(404).json({
+            status: 404,
+            error: 'Could not find Property',
+          });
         } else {
           if (process.env.NODE_ENV !== 'test') {
             const file = req.files.photo;
@@ -202,12 +218,18 @@ class property {
   static markAsSold(req, res) {
     jsonwebtoken.verify(req.token, jwtKey, (err) => {
       if (err) {
-        forbiddenRoute();
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
+        });
       } else {
         const id = parseInt(req.params.id, 10);
         const theProperty = Property.find(oneProperty => oneProperty.id === id);
         if (!theProperty) {
-          notFound('Property not Found');
+          res.status(404).json({
+            status: 404,
+            error: 'Property not Found',
+          });
         } else {
           theProperty.status = 'Sold';
           res.status(202).json({
