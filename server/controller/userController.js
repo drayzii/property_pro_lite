@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
-import jwtKey from '../config/keys';
+import dotenv from 'dotenv';
 
 import User from '../model/userModel';
 
+dotenv.config();
 
 class user {
   static signUp(req, res) {
@@ -38,7 +39,7 @@ class user {
           };
           User.push(newUser);
 
-          const token = jsonwebtoken.sign({ email }, jwtKey);
+          const token = jsonwebtoken.sign({ email }, process.env.JWT_KEY);
 
           res.status(201).json({
             status: 201,
@@ -76,7 +77,7 @@ class user {
           });
         }
         if (result) {
-          const token = jsonwebtoken.sign({ email }, jwtKey);
+          const token = jsonwebtoken.sign({ email }, process.env.JWT_KEY);
 
           res.status(200).json({
             status: 200,

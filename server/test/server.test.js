@@ -1,10 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { readFileSync as readFile } from 'fs';
 import jsonwebtoken from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import jwtKey from '../config/keys';
 import app from '../app';
+
+dotenv.config();
 
 const should = chai.should();
 
@@ -49,7 +50,7 @@ describe('/No token', () => {
 });
 describe('/All Properties', () => {
   before('should generate token', (done) => {
-    token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+    token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
     done();
   });
   it('should return 404 if none', (done) => {
@@ -351,7 +352,7 @@ describe('/Authentication', () => {
 describe('/Property', () => {
   describe('/Add', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should add a new property', (done) => {
@@ -498,7 +499,7 @@ describe('/Property', () => {
   });
   describe('/Update', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should update property', (done) => {
@@ -665,7 +666,7 @@ describe('/Property', () => {
   });
   describe('/View All', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should fetch all properties', (done) => {
@@ -698,7 +699,7 @@ describe('/Property', () => {
   });
   describe('/View By Type', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should fetch all properties', (done) => {
@@ -730,7 +731,7 @@ describe('/Property', () => {
   });
   describe('/View One', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should fetch the property', (done) => {
@@ -776,7 +777,7 @@ describe('/Property', () => {
   });
   describe('/Mark as sold', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should fetch the property', (done) => {
@@ -822,7 +823,7 @@ describe('/Property', () => {
   });
   describe('/Delete', () => {
     beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, jwtKey);
+      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
       done();
     });
     it('should delete the property', (done) => {

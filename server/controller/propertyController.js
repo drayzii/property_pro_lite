@@ -1,20 +1,21 @@
 import { v2 as cloudinary } from 'cloudinary';
 import jsonwebtoken from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import jwtKey from '../config/keys';
 import Property from '../model/propertyModel';
 
+dotenv.config();
 
 cloudinary.config({
-  cloud_name: 'drayzii',
-  api_key: '684962114961327',
-  api_secret: 'nd7rO_KTFnhyfkRXCS4pqzgIyjA',
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 
 class property {
   static addProperty(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
@@ -75,7 +76,7 @@ class property {
     });
   }
   static deleteProperty(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
@@ -101,7 +102,7 @@ class property {
     });
   }
   static viewSpecificProperty(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
@@ -125,7 +126,7 @@ class property {
     });
   }
   static viewAllProperties(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
@@ -163,7 +164,7 @@ class property {
     });
   }
   static updateProperty(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
@@ -230,7 +231,7 @@ class property {
     });
   }
   static markAsSold(req, res) {
-    jsonwebtoken.verify(req.token, jwtKey, (err) => {
+    jsonwebtoken.verify(req.token, process.env.JWT_KEY, (err) => {
       if (err) {
         res.status(403).json({
           status: 403,
