@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Post an Advert</title>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                    <h1><a href="properties.html">Property Pro Lite</a></h1>
+            </div>
+            <div id="toggle" class="toggle"><div>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+            </div></div>
+            <div id="nav-wrapper" class="nav-wrapper">
+                <ul>
+                    <li><a href="properties.html">All Properties</a></li>
+                    <li><a href="postadvert.html">&#43; New Advert</a></li>
+                    <li><a href="myadverts.html">My Adverts</a></li>
+                    <li><a href="signin.html">Log Out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section id="contentform">
+        <h2>Create an advert</h2>
+        <form>
+            <select name="types">
+                <option value="">-- Type of Property --</option>
+                <option value="1-room">One Bedroom</option>
+                <option value="2-room">Two Bedrooms</option>
+                <option value="3-room">Three Bedrooms</option>
+                <option value="mini-flat">Mini-Flat</option>
+                <option value="flat">Flat</option>
+            </select><br>
+            <input type="text" name="state" placeholder="State"/><br>
+            <input type="text" name="city" placeholder="City"/><br>
+            <input type="address" name="address" placeholder="Address"/><br>
+            <label for="picture">Image:</label><br>
+            <input type="file" name="picture" accept="image/png, image/jpeg"/><br>
+            <label for="price">Price:</label><br>
+            <select name="currency">
+                <option value="">-- Currency --</option>
+                <option value="1-room">US. Dollars</option>
+                <option value="2-room">Rwandan Francs</option>
+            </select><br>
+            <input type="number" name="amount" placeholder="Amount"/><br>
+            <a href="myadverts.html"><button type="button" class="button1">Post Advert</button></a>
+        </form>
+    </section>
+    <footer>
+        <p>&copy; Property Pro Lite 2019</p>
+    </footer class="footer2">
+    <script src="../js/scripts.js"></script>
+</body>
+</html>
