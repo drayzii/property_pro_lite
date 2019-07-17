@@ -83,10 +83,16 @@ class schema {
     }
   }
 
-  static async getProperty(data) {
+  static async getProperty(data, isAdmin) {
     await propertyModel();
-    const query = `SELECT * FROM properties WHERE 
+    let query;
+    if (isAdmin) {
+      query = `SELECT * FROM properties WHERE 
                     id = $1`;
+    } else {
+      query = `SELECT * FROM properties WHERE 
+                    id = $1 AND status = 'Available'`;
+    }
     try {
       const { rows } = await db.query(query, data);
       const property = rows[0];

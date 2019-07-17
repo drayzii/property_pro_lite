@@ -1,5 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import schema from '../schema/schema';
 
 dotenv.config();
 
@@ -11,7 +12,10 @@ const verify = async (req, res, next) => {
     try {
       const payload = await jsonwebtoken.verify(token, process.env.JWT_KEY);
       req.user = payload;
+      console.log(req.user);
       if (req.user.id) {
+        const userInfo = await schema.getUserByID([req.user.id]);
+        req.user.isAdmin = userInfo.isAdmin;
         next();
       } else {
         res.status(500).json({
@@ -22,7 +26,7 @@ const verify = async (req, res, next) => {
     } catch (error) {
       res.status(500).json({
         status: 500,
-        error: 'Error decrypting token',
+        error: 'Error decrypting token1',
       });
     }
   } else {
