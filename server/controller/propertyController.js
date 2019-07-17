@@ -277,6 +277,21 @@ class property {
     }
   }
 
+  static async viewAllProperties(req, res) {
+    const propertyInfo = await schema.getAllProperties();
+    if (!propertyInfo) {
+      res.status(401).json({
+        status: 401,
+        error: 'No Properties found',
+      });
+    } else {
+      res.status(202).json({
+        status: 202,
+        data: propertyInfo,
+      });
+    }
+  }
+
   static async deleteProperty(req, res) {
     const id = parseInt(req.params.id, 10);
     const propertyInfo = await schema.getProperty([id]);

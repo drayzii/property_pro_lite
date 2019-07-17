@@ -104,7 +104,20 @@ class schema {
 
   static async getAllProperties() {
     await propertyModel();
-    const query = 'SELECT * FROM properties';
+    const query = `SELECT
+                    properties.id,
+                    status,
+                    price,
+                    state,
+                    city,
+                    properties.address,
+                    type,
+                    createdon AS created_on,
+                    image_url,
+                    email AS OwnerEmail,
+                    phonenumber AS OwnerPhoneNumber
+                    FROM properties JOIN users
+                    ON properties.owner = users.id`;
     try {
       const { rows } = await db.query(query);
       return rows;
