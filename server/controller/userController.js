@@ -52,6 +52,40 @@ class user {
       });
     }
   }
+  static async signIn(req, res) {
+    const {
+      email, password,
+    } = req.body;
+    const userInfo = await schemas.getUser([email]);
+    if (!userInfo) {
+      res.status(401).json({
+        status: 401,
+        error: 'Email not found',
+      });
+    } else {
+      const truePassword = await bcrypt.checkPassword(password, userInfo.password);
+      if (truePassword) {
+        const data = {
+          id: userInfo.id,
+          email: userInfo.email,
+          firstname: userInfo.firstname,
+          lastname: userInfo.lastname,
+        };
+        const token = await jwt.makeToken(data);
+        res.status(201).json({
+          status: 201,
+          data: {
+            token,
+          },
+        });
+      } else {
+        res.status(401).json({
+          status: 401,
+          error: 'Wrong Password',
+        });
+      }
+    }
+  }
 }
 
 export default user;
