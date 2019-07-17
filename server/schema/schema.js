@@ -172,6 +172,21 @@ class schema {
     }
   }
 
+  static async flag(data) {
+    await propertyModel();
+    const query = `UPDATE properties SET
+                  status = 'Flagged'
+                  WHERE id = $1
+                  RETURNING *`;
+    try {
+      const { rows } = await db.query(query, data);
+      const property = rows[0];
+      return property;
+    } catch (error) {
+      return 0;
+    }
+  }
+
   static async deleteProperty(data) {
     await propertyModel();
     const query = `DELETE FROM properties WHERE 

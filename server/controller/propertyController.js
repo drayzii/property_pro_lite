@@ -207,9 +207,43 @@ class property {
         } else {
           res.status(500).json({
             status: 500,
-            error: 'Error deleteing the property',
+            error: 'Error marking the property as sold',
           });
         }
+      }
+    }
+  }
+
+  static async flag(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const propertyInfo = await schema.getProperty([id]);
+    if (!propertyInfo) {
+      res.status(404).json({
+        status: 404,
+        error: 'Property not found',
+      });
+    } else {
+      const theProperty = await schema.flag([id]);
+      if (theProperty) {
+        res.status(202).json({
+          status: 202,
+          data: {
+            id: theProperty.id,
+            status: theProperty.status,
+            type: theProperty.type,
+            state: theProperty.state,
+            city: theProperty.city,
+            address: theProperty.address,
+            price: theProperty.price,
+            created_on: theProperty.createdOn,
+            image_url: theProperty.image_url,
+          },
+        });
+      } else {
+        res.status(500).json({
+          status: 500,
+          error: 'Error flagging the property',
+        });
       }
     }
   }
