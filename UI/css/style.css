@@ -6,9 +6,6 @@ body{
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     background-color: #FFF2F2;
-    /* background-image: url("../img/89328.jpg");
-    background-repeat: no-repeat; */
-    padding-bottom: 40px;
 }
 
 nav .toggle{
@@ -85,7 +82,15 @@ nav .toggle{
         border-radius: 4px;
         box-sizing: border-box;
     }
-    footer{
+    .footer1{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: .5rem;
+        background-color: #eee; 
+    }
+    .footer2{
         position: absolute;
         width: 100%;
         background-color: #eee; 
@@ -155,12 +160,6 @@ nav .toggle{
     i:nth-child(3) {
         margin-top: 4px;
     }
-
-    /* .cross{
-        margin:0 25px 5px 15px; 
-        padding: 0;
-        transform: rotate(45deg);
-    } */
 
     .cross i {
         background: #000;
