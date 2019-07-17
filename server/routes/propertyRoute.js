@@ -10,7 +10,7 @@ router.use(fileupload({
 }));
 
 router.post('/', validation.propertyValidation, propertyController.addProperty);
-// router.delete('/:id', propertyController.deleteProperty);
+router.delete('/:id', propertyController.deleteProperty);
 router.get('/:id', propertyController.viewSpecificProperty);
 // router.get('/', propertyController.viewAllProperties);
 router.patch('/:id/sold', propertyController.markAsSold);

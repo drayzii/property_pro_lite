@@ -242,6 +242,37 @@ class property {
       });
     }
   }
+
+  static async deleteProperty(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const propertyInfo = await schema.getProperty([id]);
+    if (!propertyInfo) {
+      res.status(404).json({
+        status: 404,
+        error: 'Property not found',
+      });
+    } else {
+      if (propertyInfo.owner !== req.user.id) {
+        res.status(403).json({
+          status: 403,
+          error: 'You can not delete this property',
+        });
+      } else {
+        const deletedProperty = await schema.deleteProperty([id]);
+        if (deletedProperty) {
+          res.status(202).json({
+            status: 202,
+            message: 'Property successfully deleted',
+          });
+        } else {
+          res.status(500).json({
+            status: 500,
+            error: 'Error deleteing the property',
+          });
+        }
+      }
+    }
+  }
 }
 
 
