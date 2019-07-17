@@ -76,6 +76,35 @@ class property {
       }
     }
   }
+
+  static async viewSpecificProperty(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const propertyInfo = await schema.getProperty([id], req.user.isAdmin);
+    if (!propertyInfo) {
+      res.status(404).json({
+        status: 404,
+        error: 'Property not found',
+      });
+    } else {
+      const userInfo = await schema.getUserByID([propertyInfo.owner]);
+      res.status(200).json({
+        status: 200,
+        data: {
+          id: propertyInfo.id,
+          status: propertyInfo.status,
+          type: propertyInfo.type,
+          state: propertyInfo.state,
+          city: propertyInfo.city,
+          address: propertyInfo.address,
+          price: propertyInfo.price,
+          created_on: propertyInfo.createdOn,
+          image_url: propertyInfo.imageUrl,
+          OwnerEmail: userInfo.email,
+          OwnerPhoneNumber: userInfo.phoneNumber,
+        },
+      });
+    }
+  }
 }
 
 
