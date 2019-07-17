@@ -20,6 +20,7 @@
         "lines-between-class-members": 0,
         "no-lonely-if":"off",
         "newline-per-chained-call":"off",
+        "no-else-return":"off",
         "no-unused-vars":"off",
         "no-undef":"off"
     }
