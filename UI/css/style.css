@@ -6,8 +6,6 @@ body{
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     background-color: #FFF2F2;
-    /* background-image: url("../img/89328.jpg");
-    background-repeat: no-repeat; */
 }
 
 nav .toggle{
@@ -162,12 +160,6 @@ nav .toggle{
     i:nth-child(3) {
         margin-top: 4px;
     }
-
-    /* .cross{
-        margin:0 25px 5px 15px; 
-        padding: 0;
-        transform: rotate(45deg);
-    } */
 
     .cross i {
         background: #000;
