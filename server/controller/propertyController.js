@@ -77,6 +77,102 @@ class property {
     }
   }
 
+  static async updateProperty(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const {
+      type, state, city, address, price,
+    } = req.body;
+    let image;
+    const propertyInfo = await schema.getProperty([id]);
+    if (!propertyInfo) {
+      res.status(404).json({
+        status: 404,
+        error: 'Property not found',
+      });
+    } else {
+      if (propertyInfo.owner !== req.user.id) {
+        res.status(403).json({
+          status: 403,
+          error: 'You can not edit this property',
+        });
+      } else {
+        if (req.files) {
+          if (process.env.NODE_ENV !== 'test') {
+            const file = req.files.photo;
+            image = await uploadImage(file.tempFilePath);
+            if (!image) {
+              res.status(500).json({
+                status: 500,
+                error: 'Could not upload image',
+              });
+            } else {
+              const updatedProperty = await schema.updateProperty([
+                price,
+                state,
+                city,
+                address,
+                type,
+                image.url,
+                id,
+              ], true);
+              if (updatedProperty) {
+                res.status(202).json({
+                  status: 202,
+                  data: {
+                    id: updatedProperty.id,
+                    status: updatedProperty.status,
+                    type: updatedProperty.type,
+                    state: updatedProperty.state,
+                    city: updatedProperty.city,
+                    address: updatedProperty.address,
+                    price: updatedProperty.price,
+                    created_on: updatedProperty.createdOn,
+                    image_url: updatedProperty.image_url,
+                  },
+                });
+              } else {
+                res.status(500).json({
+                  status: 500,
+                  error: 'Error updating the property',
+                });
+              }
+            } 
+          } 
+        } else {
+          const updatedProperty = await schema.updateProperty([
+            price,
+            state,
+            city,
+            address,
+            type,
+            id,
+          ], false);
+          if (updatedProperty) {
+            res.status(202).json({
+              status: 202,
+              data: {
+                id: updatedProperty.id,
+                status: updatedProperty.status,
+                type: updatedProperty.type,
+                state: updatedProperty.state,
+                city: updatedProperty.city,
+                address: updatedProperty.address,
+                price: updatedProperty.price,
+                created_on: updatedProperty.createdOn,
+                image_url: updatedProperty.imageUrl,
+              },
+            });
+          } else {
+            res.status(500).json({
+              status: 500,
+              error: 'Error updating the property',
+            });
+          }
+        }
+      }
+    }
+  }
+
   static async viewSpecificProperty(req, res) {
     const id = parseInt(req.params.id, 10);
     const propertyInfo = await schema.getProperty([id], req.user.isAdmin);

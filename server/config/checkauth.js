@@ -12,7 +12,6 @@ const verify = async (req, res, next) => {
     try {
       const payload = await jsonwebtoken.verify(token, process.env.JWT_KEY);
       req.user = payload;
-      console.log(req.user);
       if (req.user.id) {
         const userInfo = await schema.getUserByID([req.user.id]);
         req.user.isAdmin = userInfo.isAdmin;
