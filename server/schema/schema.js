@@ -87,11 +87,37 @@ class schema {
     await propertyModel();
     let query;
     if (isAdmin) {
-      query = `SELECT * FROM properties WHERE 
-                    id = $1`;
+      query = `SELECT
+                properties.id,
+                status,
+                price,
+                state,
+                city,
+                properties.address,
+                type,
+                createdon AS created_on,
+                image_url,
+                email AS OwnerEmail,
+                phonenumber AS OwnerPhoneNumber
+                FROM properties JOIN users
+                ON properties.owner = users.id
+                WHERE id = $1`;
     } else {
-      query = `SELECT * FROM properties WHERE 
-                    id = $1 AND status = 'Available'`;
+      query = `SELECT
+                properties.id,
+                status,
+                price,
+                state,
+                city,
+                properties.address,
+                type,
+                createdon AS created_on,
+                image_url,
+                email AS OwnerEmail,
+                phonenumber AS OwnerPhoneNumber
+                FROM properties JOIN users
+                ON properties.owner = users.id
+                WHERE id = $1 AND status = 'Available'`;
     }
     try {
       const { rows } = await db.query(query, data);
@@ -102,9 +128,11 @@ class schema {
     }
   }
 
-  static async getAllProperties() {
+  static async getAllProperties(isAdmin) {
     await propertyModel();
-    const query = `SELECT
+    let query;
+    if (isAdmin) {
+      query = `SELECT
                     properties.id,
                     status,
                     price,
@@ -118,6 +146,23 @@ class schema {
                     phonenumber AS OwnerPhoneNumber
                     FROM properties JOIN users
                     ON properties.owner = users.id`;
+    } else {
+      query = `SELECT
+                properties.id,
+                status,
+                price,
+                state,
+                city,
+                properties.address,
+                type,
+                createdon AS created_on,
+                image_url,
+                email AS OwnerEmail,
+                phonenumber AS OwnerPhoneNumber
+                FROM properties JOIN users
+                ON properties.owner = users.id
+                WHERE status = 'Available'`;
+    }
     try {
       const { rows } = await db.query(query);
       return rows;
@@ -126,10 +171,41 @@ class schema {
     }
   }
 
-  static async getPropertiesByType(data) {
-    await propertyModel();
-    const query = `SELECT * FROM properties WHERE 
-                    type = $1`;
+  static async getPropertiesByType(data, isAdmin) {
+    let query;
+    if (isAdmin) {
+      query = `SELECT
+                    properties.id,
+                    status,
+                    price,
+                    state,
+                    city,
+                    properties.address,
+                    type,
+                    createdon AS created_on,
+                    image_url,
+                    email AS OwnerEmail,
+                    phonenumber AS OwnerPhoneNumber
+                    FROM properties JOIN users
+                    ON properties.owner = users.id
+                    WHERE type = $1`;
+    } else {
+      query = `SELECT
+                properties.id,
+                status,
+                price,
+                state,
+                city,
+                properties.address,
+                type,
+                createdon AS created_on,
+                image_url,
+                email AS OwnerEmail,
+                phonenumber AS OwnerPhoneNumber
+                FROM properties JOIN users
+                ON properties.owner = users.id
+                WHERE type = $1 AND status = 'Available'`;
+    }
     try {
       const { rows } = await db.query(query, data);
       return rows;

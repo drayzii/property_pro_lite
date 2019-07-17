@@ -278,17 +278,33 @@ class property {
   }
 
   static async viewAllProperties(req, res) {
-    const propertyInfo = await schema.getAllProperties();
-    if (!propertyInfo) {
-      res.status(401).json({
-        status: 401,
-        error: 'No Properties found',
-      });
+    if (req.query.type) {
+      const { type } = req.query;
+      const propertyInfo = await schema.getPropertiesByType([type], req.user.isAdmin);
+      if (propertyInfo.length === 0) {
+        res.status(401).json({
+          status: 401,
+          error: 'No Properties found',
+        });
+      } else {
+        res.status(202).json({
+          status: 202,
+          data: propertyInfo,
+        });
+      }
     } else {
-      res.status(202).json({
-        status: 202,
-        data: propertyInfo,
-      });
+      const propertyInfo = await schema.getAllProperties(req.user.isAdmin);
+      if (propertyInfo.length === 0) {
+        res.status(401).json({
+          status: 401,
+          error: 'No Properties found',
+        });
+      } else {
+        res.status(202).json({
+          status: 202,
+          data: propertyInfo,
+        });
+      }
     }
   }
 
