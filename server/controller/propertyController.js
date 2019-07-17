@@ -271,7 +271,7 @@ class property {
           created_on: propertyInfo.createdOn,
           image_url: propertyInfo.imageUrl,
           OwnerEmail: userInfo.email,
-          OwnerPhoneNumber: userInfo.phoneNumber,
+          OwnerPhoneNumber: userInfo.phonenumber,
         },
       });
     }

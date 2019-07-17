@@ -87,37 +87,11 @@ class schema {
     await propertyModel();
     let query;
     if (isAdmin) {
-      query = `SELECT
-                properties.id,
-                status,
-                price,
-                state,
-                city,
-                properties.address,
-                type,
-                createdon AS created_on,
-                image_url,
-                email AS OwnerEmail,
-                phonenumber AS OwnerPhoneNumber
-                FROM properties JOIN users
-                ON properties.owner = users.id
-                WHERE id = $1`;
+      query = `SELECT * FROM properties WHERE 
+                    id = $1`;
     } else {
-      query = `SELECT
-                properties.id,
-                status,
-                price,
-                state,
-                city,
-                properties.address,
-                type,
-                createdon AS created_on,
-                image_url,
-                email AS OwnerEmail,
-                phonenumber AS OwnerPhoneNumber
-                FROM properties JOIN users
-                ON properties.owner = users.id
-                WHERE id = $1 AND status = 'Available'`;
+      query = `SELECT * FROM properties WHERE 
+                    id = $1 AND status = 'Available'`;
     }
     try {
       const { rows } = await db.query(query, data);
