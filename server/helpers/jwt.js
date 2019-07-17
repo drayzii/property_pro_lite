@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 class jwt {
-  static async makeToken(id) {
-    const token = jsonwebtoken.sign({ id }, process.env.JWT_KEY);
+  static async makeToken(data) {
+    const token = jsonwebtoken.sign(data, process.env.JWT_KEY);
     return token;
   }
 }
