@@ -3,6 +3,10 @@ node_js:
   - "stable"
 install:
   - npm ci
+services:
+  - postgresql
+before_script:
+  - psql -c 'CREATE DATABASE pplite;' -U postgres
 script:
   - npm run test
 after_success:

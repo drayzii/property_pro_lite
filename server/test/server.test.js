@@ -2,13 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 
 import app from '../app';
-import schema from '../schema/schema';
-
-const dropTables = async () => {
-  await schema.dropTables();
-};
-
-dropTables();
 
 const should = chai.should();
 
