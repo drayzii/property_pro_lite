@@ -309,6 +309,27 @@ describe('/Authentication', () => {
 });
 describe('/Property', () => {
   describe('/Add', () => {
+    it('should add a new property', (done) => {
+      const property = {
+        type: 'flat',
+        state: 'Kigali',
+        city: 'Kigali',
+        address: 'KN 3 RD',
+        price: 50000000,
+      };
+      chai.request(app)
+        .post('/api/v1/property')
+        .set('authorization', `Bearer ${theToken}`)
+        .send(property)
+        .end((err, res) => {
+          console.log(res.body);
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(201);
+          return done();
+        });
+    });
     it('should enter valid type', (done) => {
       const property = {
         type: '',
@@ -411,6 +432,26 @@ describe('/Property', () => {
     });
   });
   describe('/Update', () => {
+    it('should update property', (done) => {
+      const property = {
+        type: 'miniflat',
+        state: 'Kigali',
+        city: 'Kigali',
+        address: 'KN3RD',
+        price: 50000000,
+      };
+      chai.request(app)
+        .patch('/api/v1/property/1')
+        .set('authorization', `Bearer ${theToken}`)
+        .send(property)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(202);
+          return done();
+        });
+    });
     it('should be available', (done) => {
       const property = {
         type: 'flat',
@@ -532,7 +573,50 @@ describe('/Property', () => {
         });
     });
   });
+  describe('/View All', () => {
+    it('should fetch all properties', (done) => {
+      chai.request(app)
+        .get('/api/v1/property')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(200);
+          return done();
+        });
+    });
+  });
+  describe('/View By Type', () => {
+    it('should fetch all properties', (done) => {
+      chai.request(app)
+        .get('/api/v1/property?type=miniflat')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(200);
+          return done();
+        });
+    });
+  });
   describe('/View One', () => {
+    it('should fetch the property', (done) => {
+      chai.request(app)
+        .get('/api/v1/property/1')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(200);
+          return done();
+        });
+    });
     it('should be available', (done) => {
       chai.request(app)
         .get('/api/v1/property/300')
@@ -548,6 +632,19 @@ describe('/Property', () => {
     });
   });
   describe('/Mark as sold', () => {
+    it('should fetch the property', (done) => {
+      chai.request(app)
+        .patch('/api/v1/property/1/sold')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(202);
+          return done();
+        });
+    });
     it('should be available', (done) => {
       chai.request(app)
         .patch('/api/v1/property/300/sold')
@@ -563,6 +660,19 @@ describe('/Property', () => {
     });
   });
   describe('/Delete', () => {
+    it('should delete the property', (done) => {
+      chai.request(app)
+        .delete('/api/v1/property/1')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(202);
+          return done();
+        });
+    });
     it('should be available', (done) => {
       chai.request(app)
         .delete('/api/v1/property/300')
