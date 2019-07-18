@@ -322,7 +322,6 @@ describe('/Property', () => {
         .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
-          console.log(res.body);
           if (err) {
             return done(err);
           }
