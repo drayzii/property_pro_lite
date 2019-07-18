@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import '@babel/polyfill';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDoc from '../doc.json';
 import tokenVerify from './middleware/checkauth';
 import userRoute from './routes/userRoute';
 import propertyRoute from './routes/propertyRoute';
@@ -19,6 +21,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', userRoute);
 app.use('/api/v1/property', tokenVerify, propertyRoute);
+
+app.use('/api/v1/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 app.use((req, res) => {
   res.status(404).json({

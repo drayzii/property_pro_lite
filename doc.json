@@ -1,0 +1,677 @@
+{
+    "openapi" : "3.0.0",
+    "info" : {
+      "title" : "Property Pro Lite",
+      "description" : "Property Pro Lite is a platform where people can create and / or search properties for sale or rent.",
+      "version" : "1.0"
+    },
+    "servers" : [ {
+      "url" : "https://pplite.herokuapp.com/"
+    }, {
+      "url" : "http://localhost:8080"
+    } ],
+    "tags" : [ {
+      "name" : "Auth"
+    }, {
+      "name" : "Properties"
+    } ],
+    "paths" : {
+      "/api/v1/auth/signup" : {
+        "post" : {
+          "tags" : [ "Auth" ],
+          "summary" : "Sign Up",
+          "requestBody" : {
+            "description" : "Endpoint to create a new user",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignUp"
+                }
+              }
+            }
+          },
+          "responses" : {
+            "201" : {
+              "description" : "User Created Successfully",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 201,
+                        "data" : {
+                          "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImVtYWlsIjoiam9uYXRoYW4yNUBnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJKb25hdGhhbiIsImlhdCI6MTU2MzQ4Nzc4M30.QjQ40WGeaundeMHjfdKZqV5oRL6r8m_9tzxJUGkkAmM"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400" : {
+              "description" : "Sign Up fail",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 409,
+                    "errors" : [ "Email already exists in our database" ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/auth/signin" : {
+        "post" : {
+          "tags" : [ "Auth" ],
+          "summary" : "Sign In",
+          "requestBody" : {
+            "description" : "Endpoint that allows a user to Log in",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Login"
+                }
+              }
+            }
+          },
+          "responses" : {
+            "200" : {
+              "description" : "User Successful Logged In",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 200,
+                        "data" : {
+                          "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImVtYWlsIjoiam9uYXRoYW4yNUBnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJKb25hdGhhbiIsImlhdCI6MTU2MzQ4Nzc4M30.QjQ40WGeaundeMHjfdKZqV5oRL6r8m_9tzxJUGkkAmM"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401" : {
+              "description" : "Wrong data",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 401,
+                    "errors" : [ "Email not found", "Wrong Password" ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/properties" : {
+        "get" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Get All Properties",
+          "responses" : {
+            "200" : {
+              "description" : "Get all property adverts",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 200,
+                        "data" : [ {
+                          "id" : 1,
+                          "owner" : 1,
+                          "status" : "Available",
+                          "price" : 5000000,
+                          "state" : "Kigali",
+                          "city" : "Kigali",
+                          "address" : "KN 3 RD",
+                          "type" : "flat",
+                          "created_on" : "2019-07-16T16:39:39.946Z",
+                          "image_url" : "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                        } ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Add  property",
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddProperty"
+                }
+              },
+              "multipart/form-data" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Property"
+                }
+              }
+            },
+            "required" : true
+          },
+          "responses" : {
+            "201" : {
+              "description" : "Property Created Successfully",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 201,
+                        "data" : {
+                          "id": 57,
+                          "status": "Available",
+                          "type": "flat",
+                          "state": "Kigali",
+                          "city": "Kigali",
+                          "address": "KN 3 RD",
+                          "price": 500000,
+                          "created_on": "2019-07-18T22:32:49.843Z",
+                          "image_url": "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                      }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security" : [ {
+            "bearerAuth" : [ ]
+          } ]
+        }
+      },
+      "/api/v1/property/{id}" : {
+        "get" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Get a specific  property",
+          "parameters" : [ {
+            "name" : "id",
+            "in" : "path",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "integer"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Get specific property",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 200,
+                        "data" : {
+                          "id" : 1,
+                          "owner" : 1,
+                          "status" : "Available",
+                          "price" : 5000000,
+                          "state" : "Kigali",
+                          "city" : "Kigali",
+                          "address" : "KN 3 RD",
+                          "type" : "flat",
+                          "created_on" : "2019-07-16T16:39:39.946Z",
+                          "image_url" : "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404" : {
+              "description" : "Property Not Found",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 404,
+                    "error" : "No properties found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Delete a property",
+          "parameters" : [ {
+            "name" : "id",
+            "in" : "path",
+            "description" : "id of property  to delete",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "integer",
+              "format" : "int64"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Delete a property",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 200,
+                        "data" : {
+                          "message" : "Property deleted successfully"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "403" : {
+              "description" : "You can not delete this property",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 403,
+                    "error" : {
+                      "message" : "You can not delete this property"
+                    }
+                  }
+                }
+              }
+            },
+            "404" : {
+              "description" : "Property Not Found",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 404,
+                    "error" : "Property Not Found!"
+                  }
+                }
+              }
+            }
+          },
+          "security" : [ {
+            "bearerAuth" : [ ]
+          } ]
+        },
+        "patch" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Update a Property",
+          "parameters" : [ {
+            "name" : "id",
+            "in" : "path",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "integer"
+            }
+          } ],
+          "requestBody" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getProperty"
+                }
+              }
+            },
+            "required" : true
+          },
+          "responses" : {
+            "202" : {
+              "description" : "Property Updated Successfully",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 201,
+                        "data" : {
+                          "id": 57,
+                          "status": "Available",
+                          "type": "flat",
+                          "state": "Kigali",
+                          "city": "Kigali",
+                          "address": "KN 3 RD",
+                          "price": 500000,
+                          "created_on": "2019-07-18T22:32:49.843Z",
+                          "image_url": "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                      }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "403" : {
+              "description" : "You can not edit this property",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 403,
+                    "error" : {
+                      "message" : "You can not edit this property"
+                    }
+                  }
+                }
+              }
+            },
+            "404" : {
+              "description" : "Property Not Found",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 404,
+                    "error" : "Property Not Found!"
+                  }
+                }
+              }
+            }
+          },
+          "security" : [ {
+            "bearerAuth" : [ ]
+          } ]
+        }
+      },
+      "/api/v1/property?type={type}" : {
+        "get" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Get property by type",
+          "parameters" : [ {
+            "name" : "type",
+            "in" : "query",
+            "required" : false,
+            "style" : "form",
+            "explode" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Get properties by type",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 200,
+                        "data" : [ {
+                          "id" : 1,
+                          "owner" : 1,
+                          "status" : "Available",
+                          "price" : 5000000,
+                          "state" : "Kigali",
+                          "city" : "Kigali",
+                          "address" : "KN 3 RD",
+                          "type" : "flat",
+                          "created_on" : "2019-07-16T16:39:39.946Z",
+                          "image_url" : "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                        } ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404" : {
+              "description" : "Property Not Found",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 404,
+                    "error" : "Property Not Found!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/property/{id}/sold" : {
+        "patch" : {
+          "tags" : [ "Properties" ],
+          "summary" : "Mark Property as Sold",
+          "parameters" : [ {
+            "name" : "id",
+            "in" : "path",
+            "required" : true,
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          } ],
+          "responses" : {
+            "201" : {
+              "description" : "Mark Property as Sold",
+              "content" : {
+                "application/json" : {
+                  "examples" : {
+                    "foo" : {
+                      "value" : {
+                        "status" : 201,
+                        "data" : {
+                          "id": 57,
+                          "status": "Available",
+                          "type": "flat",
+                          "state": "Kigali",
+                          "city": "Kigali",
+                          "address": "KN 3 RD",
+                          "price": 500000,
+                          "created_on": "2019-07-18T22:32:49.843Z",
+                          "image_url": "http://res.cloudinary.com/drayzii/image/upload/v1563489170/zpyiaok0loklpyqr2wh0.jpg"
+                      }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "403" : {
+              "description" : "You can not edit this property",
+              "content" : {
+                "application/json" : {
+                  "example" : {
+                    "status" : 403,
+                    "error" : {
+                      "message" : "You can not edit this property"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security" : [ {
+            "bearerAuth" : [ ]
+          } ]
+        }
+      }
+    },
+    "components" : {
+      "schemas" : {
+        "Login" : {
+          "type" : "object",
+          "properties" : {
+            "email" : {
+              "type" : "string",
+              "example" : "jonathan25@gmail.com"
+            },
+            "password" : {
+              "type" : "string",
+              "example" : "native"
+            }
+          }
+        },
+        "SignUp" : {
+          "type" : "object",
+          "properties" : {
+            "email" : {
+              "type" : "string",
+              "example" : "jonathan25@gmail.com"
+            },
+            "firstName" : {
+              "type" : "string",
+              "example" : "Jonathan"
+            },
+            "lastName" : {
+              "type" : "string",
+              "example" : "Shyaka"
+            },
+            "address" : {
+              "type" : "string",
+              "example" : "KN 3 RD"
+            },
+            "password" : {
+              "type" : "string",
+              "example" : "native"
+            },
+            "phoneNumber" : {
+              "type" : "string",
+              "example" : "0788888888"
+            }
+          }
+        },
+        "getProperty" : {
+          "type" : "object",
+          "properties" : {
+            "owner" : {
+              "type" : "integer",
+              "example" : 1
+            },
+            "price" : {
+              "type" : "integer",
+              "example" : 50000000
+            },
+            "state" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "city" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "address" : {
+              "type" : "string",
+              "example" : "KN 3 RD"
+            },
+            "type" : {
+              "type" : "string",
+              "example" : "flat"
+            }
+          }
+        },
+        "AddProperty" : {
+          "type" : "object",
+          "properties" : {
+            "price" : {
+              "type" : "integer",
+              "example" : 5000000
+            },
+            "state" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "city" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "address" : {
+              "type" : "string",
+              "example" : "KN 3 RD"
+            },
+            "type" : {
+              "type" : "string",
+              "example" : "flat"
+            }
+          }
+        },
+        "Property" : {
+          "type" : "object",
+          "properties" : {
+            "price" : {
+              "type" : "integer",
+              "example" : 5000000
+            },
+            "state" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "city" : {
+              "type" : "string",
+              "example" : "Kigali"
+            },
+            "address" : {
+              "type" : "string",
+              "example" : "KN 3 RD"
+            },
+            "type" : {
+              "type" : "string",
+              "example" : "flat"
+            },
+            "image" : {
+              "type" : "string",
+              "format" : "binary"
+            }
+          }
+        }
+      },
+      "responses" : {
+        "UnauthorizedError" : {
+          "description" : "Unauthorized",
+          "content" : {
+            "application/json" : {
+              "example" : {
+                "status" : 401,
+                "message" : "Unauthorized"
+              }
+            }
+          }
+        },
+        "ForbiddenError" : {
+          "description" : "Forbidden",
+          "content" : {
+            "application/json" : {
+              "example" : {
+                "status" : 403,
+                "error" : {
+                  "message" : "Forbidden"
+                }
+              }
+            }
+          }
+        },
+        "NotFoundError" : {
+          "description" : "Not Found",
+          "content" : {
+            "application/json" : {
+              "example" : {
+                "status" : 404,
+                "error" : "Not Found"
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes" : {
+        "bearerAuth" : {
+          "type" : "http",
+          "scheme" : "bearer",
+          "bearerFormat" : "JWT"
+        }
+      }
+    }
+  }
