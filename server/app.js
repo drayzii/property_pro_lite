@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   res.status(200).json({
     status: 200,
     data: 'Welcome to PropertyPro Lite!',
-  })
+  });
 });
 
 app.use('/api/v1/auth', userRoute);

@@ -14,6 +14,4 @@ const pool = new Pool({
   connectionString,
 });
 
-module.exports = {
-  query: (text, params, callback) => pool.query(text, params, callback),
-};
+export default pool;
