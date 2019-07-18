@@ -17,15 +17,15 @@ const verify = async (req, res, next) => {
         req.user.isAdmin = userInfo.isAdmin;
         next();
       } else {
-        res.status(500).json({
-          status: 500,
-          error: 'Error decrypting token',
+        res.status(403).json({
+          status: 403,
+          error: 'Forbidden route',
         });
       }
     } catch (error) {
-      res.status(500).json({
-        status: 500,
-        error: 'Error decrypting token1',
+      res.status(403).json({
+        status: 403,
+        error: 'Forbidden route',
       });
     }
   } else {

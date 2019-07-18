@@ -1,17 +1,20 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import jsonwebtoken from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
 import app from '../app';
+import schema from '../schema/schema';
 
-dotenv.config();
+const dropTables = async () => {
+  await schema.dropTables();
+};
+
+dropTables();
 
 const should = chai.should();
 
 chai.use(chaiHttp);
 
-let token;
+let theToken;
 describe('/Unknown route', () => {
   it('should return not found', (done) => {
     chai.request(app)
@@ -37,32 +40,13 @@ describe('/No token', () => {
     };
     chai.request(app)
       .post('/api/v1/property')
-      .set('authorization', `Bearer ${token}`)
+      .set('authorization', `Bearer ${theToken}`)
       .send(property)
       .end((err, res) => {
         if (err) {
           return done(err);
         }
         res.body.status.should.equal(403);
-        return done();
-      });
-  });
-});
-describe('/All Properties', () => {
-  before('should generate token', (done) => {
-    token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-    done();
-  });
-  it('should return 404 if none', (done) => {
-    chai.request(app)
-      .get('/api/v1/property')
-      .set('authorization', `Bearer ${token}`)
-      .send()
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        res.body.status.should.equal(404);
         return done();
       });
   });
@@ -89,26 +73,6 @@ describe('/Authentication', () => {
           return done();
         });
     });
-    it('should create a token', (done) => {
-      const user = {
-        email: 'jonathan2@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
-        password: 'native',
-        phoneNumber: '0780888888',
-        address: 'KN 3 RD',
-      };
-      chai.request(app)
-        .post('/api/v1/auth/signup')
-        .send(user)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          should.exist(res.body.data.token);
-          return done();
-        });
-    });
     it('should not reuse the same email', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
@@ -125,7 +89,7 @@ describe('/Authentication', () => {
           if (err) {
             return done(err);
           }
-          res.body.status.should.equal(401);
+          res.body.status.should.equal(409);
           return done();
         });
     });
@@ -279,7 +243,7 @@ describe('/Authentication', () => {
           if (err) {
             return done(err);
           }
-          res.body.status.should.equal(404);
+          res.body.status.should.equal(401);
           return done();
         });
     });
@@ -295,7 +259,7 @@ describe('/Authentication', () => {
           if (err) {
             return done(err);
           }
-          res.body.status.should.equal(400);
+          res.body.status.should.equal(401);
           return done();
         });
     });
@@ -311,6 +275,7 @@ describe('/Authentication', () => {
           if (err) {
             return done(err);
           }
+          theToken = res.body.data.token;
           should.exist(res.body.data.token);
           return done();
         });
@@ -351,51 +316,6 @@ describe('/Authentication', () => {
 });
 describe('/Property', () => {
   describe('/Add', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should add a new property', (done) => {
-      const property = {
-        type: 'flat',
-        state: 'Kigali',
-        city: 'Kigali',
-        address: 'KN3RD',
-        price: 50000000,
-      };
-      chai.request(app)
-        .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
-        .send(property)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(201);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      const property = {
-        type: 'flat',
-        state: 'Kigali',
-        city: 'Kigali',
-        address: 'KN3RD',
-        price: 50000000,
-      };
-      token += 'a';
-      chai.request(app)
-        .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
-        .send(property)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
     it('should enter valid type', (done) => {
       const property = {
         type: '',
@@ -406,7 +326,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -426,7 +346,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -446,7 +366,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -466,7 +386,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -486,7 +406,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .post('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -498,51 +418,6 @@ describe('/Property', () => {
     });
   });
   describe('/Update', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should update property', (done) => {
-      const property = {
-        type: 'miniflat',
-        state: 'Kigali',
-        city: 'Kigali',
-        address: 'KN3RD',
-        price: 50000000,
-      };
-      chai.request(app)
-        .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send(property)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(202);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      const property = {
-        type: 'miniflat',
-        state: 'Kigali',
-        city: 'Kigali',
-        address: 'KN3RD',
-        price: 50000000,
-      };
-      token += 'a';
-      chai.request(app)
-        .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send(property)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
     it('should be available', (done) => {
       const property = {
         type: 'flat',
@@ -553,7 +428,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/200')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -573,7 +448,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -593,7 +468,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -613,7 +488,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -633,7 +508,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -653,7 +528,7 @@ describe('/Property', () => {
       };
       chai.request(app)
         .patch('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send(property)
         .end((err, res) => {
           if (err) {
@@ -664,107 +539,11 @@ describe('/Property', () => {
         });
     });
   });
-  describe('/View All', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should fetch all properties', (done) => {
-      chai.request(app)
-        .get('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(200);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      token += 'a';
-      chai.request(app)
-        .get('/api/v1/property')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
-  });
-  describe('/View By Type', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should fetch all properties', (done) => {
-      chai.request(app)
-        .get('/api/v1/property?type=miniflat')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(200);
-          return done();
-        });
-    });
-    it('should be available', (done) => {
-      chai.request(app)
-        .get('/api/v1/property?type=flat')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(404);
-          return done();
-        });
-    });
-  });
   describe('/View One', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should fetch the property', (done) => {
-      chai.request(app)
-        .get('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(200);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      token += 'a';
-      chai.request(app)
-        .get('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
     it('should be available', (done) => {
       chai.request(app)
         .get('/api/v1/property/300')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send()
         .end((err, res) => {
           if (err) {
@@ -776,41 +555,10 @@ describe('/Property', () => {
     });
   });
   describe('/Mark as sold', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should fetch the property', (done) => {
-      chai.request(app)
-        .patch('/api/v1/property/1/sold')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(202);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      token += 'a';
-      chai.request(app)
-        .patch('/api/v1/property/1/sold')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
     it('should be available', (done) => {
       chai.request(app)
         .patch('/api/v1/property/300/sold')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send()
         .end((err, res) => {
           if (err) {
@@ -822,41 +570,10 @@ describe('/Property', () => {
     });
   });
   describe('/Delete', () => {
-    beforeEach('should generate token', (done) => {
-      token = jsonwebtoken.sign({ email: 'jonathan@gmail.com' }, process.env.JWT_KEY);
-      done();
-    });
-    it('should delete the property', (done) => {
-      chai.request(app)
-        .delete('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(202);
-          return done();
-        });
-    });
-    it('should have a valid token', (done) => {
-      token += 'a';
-      chai.request(app)
-        .delete('/api/v1/property/1')
-        .set('authorization', `Bearer ${token}`)
-        .send()
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          res.body.status.should.equal(403);
-          return done();
-        });
-    });
     it('should be available', (done) => {
       chai.request(app)
         .delete('/api/v1/property/300')
-        .set('authorization', `Bearer ${token}`)
+        .set('authorization', `Bearer ${theToken}`)
         .send()
         .end((err, res) => {
           if (err) {
@@ -866,5 +583,28 @@ describe('/Property', () => {
           return done();
         });
     });
+  });
+});
+describe('/Token', () => {
+  it('should have a valid token to access properties route', (done) => {
+    const property = {
+      type: 'flat',
+      state: 'Kigali',
+      city: 'Kigali',
+      address: 'KN3RD',
+      price: 50000000,
+    };
+    theToken += 'a';
+    chai.request(app)
+      .post('/api/v1/property')
+      .set('authorization', `Bearer ${theToken}`)
+      .send(property)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(403);
+        return done();
+      });
   });
 });

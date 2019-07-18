@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyparser from 'body-parser';
-import tokenVerify from './config/checkauth';
+import '@babel/polyfill';
+import tokenVerify from './middleware/checkauth';
 import userRoute from './routes/userRoute';
 import propertyRoute from './routes/propertyRoute';
 

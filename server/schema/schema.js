@@ -263,6 +263,13 @@ class schema {
       return 0;
     }
   }
+
+  static async dropTables() {
+    const query = 'DROP TABLE IF EXISTS properties';
+    await db.query(query);
+    const query2 = 'DROP TABLE IF EXISTS users';
+    await db.query(query2);
+  }
 }
 
 export default schema;

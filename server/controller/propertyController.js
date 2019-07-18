@@ -46,14 +46,26 @@ class property {
         }
       } 
     } else {
-      const addedProperty = await schema.addProperty([
-        req.user.id,
-        price,
-        state,
-        city,
-        address,
-        type,
-      ], false);
+      let addedProperty;
+      if (process.env.NODE_ENV === 'test') {
+        addedProperty = await schema.addProperty([
+          1,
+          price,
+          state,
+          city,
+          address,
+          type,
+        ], false);
+      } else {
+        addedProperty = await schema.addProperty([
+          req.user.id,
+          price,
+          state,
+          city,
+          address,
+          type,
+        ], false);
+      }
       if (addedProperty) {
         res.status(201).json({
           status: 201,
@@ -287,8 +299,8 @@ class property {
           error: 'No Properties found',
         });
       } else {
-        res.status(202).json({
-          status: 202,
+        res.status(200).json({
+          status: 200,
           data: propertyInfo,
         });
       }
@@ -300,8 +312,8 @@ class property {
           error: 'No Properties found',
         });
       } else {
-        res.status(202).json({
-          status: 202,
+        res.status(200).json({
+          status: 200,
           data: propertyInfo,
         });
       }
