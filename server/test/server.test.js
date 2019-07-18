@@ -1,5 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import userTable from '../model/userModel';
+import propertyTable from '../model/propertyModel';
 
 import app from '../app';
 
@@ -8,6 +10,26 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 let theToken;
+let newToken;
+before('Create tables', (done) => {
+  userTable();
+  propertyTable();
+  done();
+});
+describe('/Homepage', () => {
+  it('should return a welcome message', (done) => {
+    chai.request(app)
+      .get('/')
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(200);
+        return done();
+      });
+  });
+});
 describe('/Unknown route', () => {
   it('should return not found', (done) => {
     chai.request(app)
@@ -307,6 +329,65 @@ describe('/Authentication', () => {
     });
   });
 });
+describe('/No token', () => {
+  it('should return 403', (done) => {
+    chai.request(app)
+      .get('/api/v1/property')
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(403);
+        return done();
+      });
+  });
+});
+describe('/Invalid token', () => {
+  it('should return 403', (done) => {
+    chai.request(app)
+      .get('/api/v1/property')
+      .set('authorization', 'Bearer girhgiotgjtieiogjietgivudgheuihuergi')
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(403);
+        return done();
+      });
+  });
+});
+describe('/View All Properties', () => {
+  it('should return 404 if none', (done) => {
+    chai.request(app)
+      .get('/api/v1/property')
+      .set('authorization', `Bearer ${theToken}`)
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(404);
+        return done();
+      });
+  });
+});
+describe('/View All Properties by Type', () => {
+  it('should return 404 if none', (done) => {
+    chai.request(app)
+      .get('/api/v1/property?type=miniflat')
+      .set('authorization', `Bearer ${theToken}`)
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(404);
+        return done();
+      });
+  });
+});
 describe('/Property', () => {
   describe('/Add', () => {
     it('should add a new property', (done) => {
@@ -430,7 +511,48 @@ describe('/Property', () => {
         });
     });
   });
+  before('should create a new user', (done) => {
+    const user = {
+      email: 'jonathan2@gmail.com',
+      firstname: 'Jonathan',
+      lastname: 'Shyaka',
+      password: 'native',
+      phoneNumber: '0780888888',
+      address: 'KN 3 RD',
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        newToken = res.body.data.token;
+        res.body.status.should.equal(201);
+        return done();
+      });
+  });
   describe('/Update', () => {
+    it('should be owner to update property', (done) => {
+      const property = {
+        type: 'miniflat',
+        state: 'Kigali',
+        city: 'Kigali',
+        address: 'KN3RD',
+        price: 50000000,
+      };
+      chai.request(app)
+        .patch('/api/v1/property/1')
+        .set('authorization', `Bearer ${newToken}`)
+        .send(property)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(403);
+          return done();
+        });
+    });
     it('should update property', (done) => {
       const property = {
         type: 'miniflat',
@@ -588,7 +710,7 @@ describe('/Property', () => {
     });
   });
   describe('/View By Type', () => {
-    it('should fetch all properties', (done) => {
+    it('should fetch all properties by type', (done) => {
       chai.request(app)
         .get('/api/v1/property?type=miniflat')
         .set('authorization', `Bearer ${theToken}`)
@@ -631,7 +753,20 @@ describe('/Property', () => {
     });
   });
   describe('/Mark as sold', () => {
-    it('should fetch the property', (done) => {
+    it('should be owner to mark property as sold', (done) => {
+      chai.request(app)
+        .patch('/api/v1/property/1/sold')
+        .set('authorization', `Bearer ${newToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(403);
+          return done();
+        });
+    });
+    it('should mark property as sold', (done) => {
       chai.request(app)
         .patch('/api/v1/property/1/sold')
         .set('authorization', `Bearer ${theToken}`)
@@ -658,10 +793,91 @@ describe('/Property', () => {
         });
     });
   });
+  before('should add a new property', (done) => {
+    const property = {
+      type: 'flat',
+      state: 'Kigali',
+      city: 'Kigali',
+      address: 'KN 3 RD',
+      price: 50000000,
+    };
+    chai.request(app)
+      .post('/api/v1/property')
+      .set('authorization', `Bearer ${theToken}`)
+      .send(property)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(201);
+        return done();
+      });
+  });
+  describe('/Mark as sold', () => {
+    it('should flag a property', (done) => {
+      chai.request(app)
+        .patch('/api/v1/property/2/flag')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(202);
+          return done();
+        });
+    });
+    it('should be available', (done) => {
+      chai.request(app)
+        .patch('/api/v1/property/300/flag')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(404);
+          return done();
+        });
+    });
+  });
+  before('should add a new property', (done) => {
+    const property = {
+      type: 'flat',
+      state: 'Kigali',
+      city: 'Kigali',
+      address: 'KN 3 RD',
+      price: 50000000,
+    };
+    chai.request(app)
+      .post('/api/v1/property')
+      .set('authorization', `Bearer ${theToken}`)
+      .send(property)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(201);
+        return done();
+      });
+  });
   describe('/Delete', () => {
+    it('should be the owner to delete the property', (done) => {
+      chai.request(app)
+        .delete('/api/v1/property/3')
+        .set('authorization', `Bearer ${newToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(403);
+          return done();
+        });
+    });
     it('should delete the property', (done) => {
       chai.request(app)
-        .delete('/api/v1/property/1')
+        .delete('/api/v1/property/3')
         .set('authorization', `Bearer ${theToken}`)
         .send()
         .end((err, res) => {

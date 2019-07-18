@@ -294,8 +294,8 @@ class property {
       const { type } = req.query;
       const propertyInfo = await schema.getPropertiesByType([type], req.user.isAdmin);
       if (propertyInfo.length === 0) {
-        res.status(401).json({
-          status: 401,
+        res.status(404).json({
+          status: 404,
           error: 'No Properties found',
         });
       } else {
@@ -307,8 +307,8 @@ class property {
     } else {
       const propertyInfo = await schema.getAllProperties(req.user.isAdmin);
       if (propertyInfo.length === 0) {
-        res.status(401).json({
-          status: 401,
+        res.status(404).json({
+          status: 404,
           error: 'No Properties found',
         });
       } else {
@@ -344,7 +344,7 @@ class property {
         } else {
           res.status(500).json({
             status: 500,
-            error: 'Error deleteing the property',
+            error: 'Error deleting the property',
           });
         }
       }
