@@ -9,11 +9,65 @@ This is a platform where people can create and/or search properties for sale or 
 
 ---
 
-## Demo
+## Cloning
 
-[Property Pro Lite](https://drayzii.github.io/property_pro_lite/UI/)
 
----
+```sh
+git clone git@github.com:drayzii/property_pro_lite.git
+```
+
+
+## Installing Dependencies
+
+
+```sh
+npm install
+```
+
+
+## Usage
+
+1. Creating an account: POST request
+```sh
+/auth/signup
+```
+2. Logging In: POST request
+```sh
+/auth/signin
+```
+3. Posting a property advert: POST request
+```sh
+/property
+```
+4. Updating a property advert: PATCH request
+```sh
+/property/<:id>
+```
+5. Deleting a property advert: DELETE request
+```sh
+/property/<:id>
+```
+6. Marking a property as Sold: POST request
+```sh
+/property/<:id>/sold
+```
+7. Flagging a property advert: PATCH request
+```sh
+/property/<:id>/flag
+```
+8. View a property advert: GET request
+```sh
+/property/<:id>
+```
+9. View all property adverts: GET request
+```sh
+/property
+```
+10. View property adverts by type: GET request
+```sh
+/property?type=<:type>
+```
+
 
 ## Contributors
 
