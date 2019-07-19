@@ -51,7 +51,7 @@ describe('/No token', () => {
       state: 'Kigali',
       city: 'Kigali',
       address: 'KN3RD',
-      price: 50000000,
+      price: '50000000',
     };
     chai.request(app)
       .post('/api/v1/property')
@@ -68,14 +68,14 @@ describe('/No token', () => {
 });
 describe('/Authentication', () => {
   describe('/Sign Up', () => {
-    it('should create a new user', (done) => {
+    before('should create a new user', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 8 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -91,11 +91,11 @@ describe('/Authentication', () => {
     it('should not reuse the same email', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 9 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -111,11 +111,11 @@ describe('/Authentication', () => {
     it('should enter valid email', (done) => {
       const user = {
         email: 'jonathan',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 10 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -131,11 +131,11 @@ describe('/Authentication', () => {
     it('should enter valid first name', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: '',
-        lastname: 'Shyaka',
+        firstName: '',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 11 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -151,11 +151,11 @@ describe('/Authentication', () => {
     it('should enter valid last name', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: '',
+        firstName: 'Jonathan',
+        lastName: '',
         password: 'native',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 12 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -171,11 +171,11 @@ describe('/Authentication', () => {
     it('should enter valid password', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'nat',
         phoneNumber: '0780888888',
-        address: 'KN 3 RD',
+        address: 'KN 13 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -191,11 +191,11 @@ describe('/Authentication', () => {
     it('should enter valid phone number', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780',
-        address: 'KN 3 RD',
+        address: 'KN 14 RD',
       };
       chai.request(app)
         .post('/api/v1/auth/signup')
@@ -211,8 +211,8 @@ describe('/Authentication', () => {
     it('should enter valid address', (done) => {
       const user = {
         email: 'jonathan@gmail.com',
-        firstname: 'Jonathan',
-        lastname: 'Shyaka',
+        firstName: 'Jonathan',
+        lastName: 'Shyaka',
         password: 'native',
         phoneNumber: '0780888888',
         address: '',
@@ -373,30 +373,15 @@ describe('/View All Properties', () => {
       });
   });
 });
-describe('/View All Properties by Type', () => {
-  it('should return 404 if none', (done) => {
-    chai.request(app)
-      .get('/api/v1/property?type=miniflat')
-      .set('authorization', `Bearer ${theToken}`)
-      .send()
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        res.body.status.should.equal(404);
-        return done();
-      });
-  });
-});
 describe('/Property', () => {
   describe('/Add', () => {
-    it('should add a new property', (done) => {
+    before('should add a new property', (done) => {
       const property = {
         type: 'flat',
         state: 'Kigali',
         city: 'Kigali',
-        address: 'KN 3 RD',
-        price: 50000000,
+        address: 'KN 15 RD',
+        price: '50000000',
       };
       chai.request(app)
         .post('/api/v1/property')
@@ -416,7 +401,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: 'Kigali',
         address: 'KN 3 RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .post('/api/v1/property')
@@ -436,7 +421,7 @@ describe('/Property', () => {
         state: '',
         city: 'Kigali',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .post('/api/v1/property')
@@ -456,7 +441,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: '',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .post('/api/v1/property')
@@ -476,7 +461,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: 'Kigali',
         address: '',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .post('/api/v1/property')
@@ -514,11 +499,11 @@ describe('/Property', () => {
   before('should create a new user', (done) => {
     const user = {
       email: 'jonathan2@gmail.com',
-      firstname: 'Jonathan',
-      lastname: 'Shyaka',
+      firstName: 'Jonathan',
+      lastName: 'Shyaka',
       password: 'native',
       phoneNumber: '0780888888',
-      address: 'KN 3 RD',
+      address: 'KN 1 RD',
     };
     chai.request(app)
       .post('/api/v1/auth/signup')
@@ -539,7 +524,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: 'Kigali',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -559,7 +544,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: 'Kigali',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -578,8 +563,8 @@ describe('/Property', () => {
         type: 'flat',
         state: 'Kigali',
         city: 'Kigali',
-        address: 'KN 3 RD',
-        price: 50000000,
+        address: 'KN 2 RD',
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/200')
@@ -598,8 +583,8 @@ describe('/Property', () => {
         type: '',
         state: 'Kigali',
         city: 'Kigali',
-        address: 'KN 3 RD',
-        price: 50000000,
+        address: 'KN 4 RD',
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -619,7 +604,7 @@ describe('/Property', () => {
         state: '',
         city: 'Kigali',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -639,7 +624,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: '',
         address: 'KN3RD',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -659,7 +644,7 @@ describe('/Property', () => {
         state: 'Kigali',
         city: 'Kigali',
         address: '',
-        price: 50000000,
+        price: '50000000',
       };
       chai.request(app)
         .patch('/api/v1/property/1')
@@ -713,6 +698,21 @@ describe('/Property', () => {
     it('should fetch all properties by type', (done) => {
       chai.request(app)
         .get('/api/v1/property?type=miniflat')
+        .set('authorization', `Bearer ${theToken}`)
+        .send()
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          res.body.status.should.equal(200);
+          return done();
+        });
+    });
+  });
+  describe('/View By Status', () => {
+    it('should fetch all properties by status', (done) => {
+      chai.request(app)
+        .get('/api/v1/property?status=Available')
         .set('authorization', `Bearer ${theToken}`)
         .send()
         .end((err, res) => {
@@ -795,11 +795,11 @@ describe('/Property', () => {
   });
   before('should add a new property', (done) => {
     const property = {
-      type: 'flat',
+      type: 'miniflat',
       state: 'Kigali',
       city: 'Kigali',
-      address: 'KN 3 RD',
-      price: 50000000,
+      address: 'KN 5 RD',
+      price: '50000000',
     };
     chai.request(app)
       .post('/api/v1/property')
@@ -843,11 +843,11 @@ describe('/Property', () => {
   });
   before('should add a new property', (done) => {
     const property = {
-      type: 'flat',
+      type: 'threeroom',
       state: 'Kigali',
       city: 'Kigali',
-      address: 'KN 3 RD',
-      price: 50000000,
+      address: 'KN 6 RD',
+      price: '50000000',
     };
     chai.request(app)
       .post('/api/v1/property')
@@ -903,6 +903,36 @@ describe('/Property', () => {
     });
   });
 });
+describe('/View All Properties by Type', () => {
+  it('should return 404 if none', (done) => {
+    chai.request(app)
+      .get('/api/v1/property?type=miniflat')
+      .set('authorization', `Bearer ${theToken}`)
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(404);
+        return done();
+      });
+  });
+});
+describe('/View All Properties by Status', () => {
+  it('should return 404 if none', (done) => {
+    chai.request(app)
+      .get('/api/v1/property?status=qwerty')
+      .set('authorization', `Bearer ${theToken}`)
+      .send()
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        res.body.status.should.equal(404);
+        return done();
+      });
+  });
+});
 describe('/Token', () => {
   it('should have a valid token to access properties route', (done) => {
     const property = {
@@ -910,7 +940,7 @@ describe('/Token', () => {
       state: 'Kigali',
       city: 'Kigali',
       address: 'KN3RD',
-      price: 50000000,
+      price: '50000000',
     };
     theToken += 'a';
     chai.request(app)

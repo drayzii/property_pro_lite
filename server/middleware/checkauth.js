@@ -1,6 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import schema from '../schema/schema';
+import response from '../helpers/responses';
 
 dotenv.config();
 
@@ -17,22 +18,13 @@ const verify = async (req, res, next) => {
         req.user.isAdmin = userInfo.isAdmin;
         next();
       } else {
-        res.status(403).json({
-          status: 403,
-          error: 'Forbidden route',
-        });
+        response.error(res, 403, 'Forbidden route');
       }
     } catch (error) {
-      res.status(403).json({
-        status: 403,
-        error: 'Forbidden route',
-      });
+      response.error(res, 403, 'Forbidden route');
     }
   } else {
-    res.status(403).json({
-      status: 403,
-      error: 'Forbidden route',
-    });
+    response.error(res, 403, 'Forbidden route');
   }
 };
 

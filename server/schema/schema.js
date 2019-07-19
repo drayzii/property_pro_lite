@@ -102,6 +102,19 @@ class schema {
     }
   }
 
+  static async checkProperty(data) {
+    await propertyModel();
+    const query = `SELECT * FROM properties WHERE 
+                    price = $1 AND address = $2 AND type = $3`;
+    try {
+      const { rows } = await db.query(query, data);
+      const property = rows[0];
+      return property;
+    } catch (error) {
+      return 0;
+    }
+  }
+
   static async getAllProperties(isAdmin) {
     await propertyModel();
     let query;
@@ -180,6 +193,30 @@ class schema {
                 ON properties.owner = users.id
                 WHERE type = $1 AND status = 'Available'`;
     }
+    try {
+      const { rows } = await db.query(query, data);
+      return rows;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  static async getPropertiesByStatus(data) {
+    const query = `SELECT
+                properties.id,
+                status,
+                price,
+                state,
+                city,
+                properties.address,
+                type,
+                createdon AS created_on,
+                image_url,
+                email AS OwnerEmail,
+                phonenumber AS OwnerPhoneNumber
+                FROM properties JOIN users
+                ON properties.owner = users.id
+                WHERE status = $1`;
     try {
       const { rows } = await db.query(query, data);
       return rows;

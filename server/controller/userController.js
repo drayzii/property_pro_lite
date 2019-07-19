@@ -1,25 +1,23 @@
 import bcrypt from '../helpers/bcrypt';
 import jwt from '../helpers/jwt';
 import schemas from '../schema/schema';
+import response from '../helpers/responses';
 
 class user {
   static async signUp(req, res) {
     const {
-      email, firstname, lastname, password, phoneNumber, address,
+      email, firstName, lastName, password, phoneNumber, address,
     } = req.body;
     const userInfo = await schemas.getUser([email]);
     if (!userInfo) {
       const encryptedPassword = await bcrypt.encryptPassword(password);
       if (!encryptedPassword) {
-        res.status(500).json({
-          status: 500,
-          error: 'Could not encrypt password',
-        });
+        response.error(res, 500, 'Could not encrypt password');
       } else {
         const newUser = await schemas.createUser([
           email,
-          firstname,
-          lastname,
+          firstName,
+          lastName,
           encryptedPassword,
           phoneNumber,
           address,
@@ -28,28 +26,19 @@ class user {
           const data = {
             id: newUser.id,
             email: newUser.email,
-            firstname: newUser.firstname,
-            lastname: newUser.lastname,
+            firstName: newUser.firstname,
+            lastName: newUser.lastname,
           };
           const token = await jwt.makeToken(data);
-          res.status(201).json({
-            status: 201,
-            data: {
-              token,
-            },
+          response.success(res, 201, {
+            token,
           });
         } else {
-          res.status(500).json({
-            status: 500,
-            error: 'Could not create user',
-          });
+          response.error(res, 500, 'Could not create user');
         }
       }
     } else {
-      res.status(409).json({
-        status: 409,
-        error: 'Email already exists in our database',
-      });
+      response.error(res, 409, 'Email already exists in our database');
     }
   }
   static async signIn(req, res) {
@@ -58,31 +47,22 @@ class user {
     } = req.body;
     const userInfo = await schemas.getUser([email]);
     if (!userInfo) {
-      res.status(401).json({
-        status: 401,
-        error: 'Email not found',
-      });
+      response.error(res, 401, 'Email not found');
     } else {
       const truePassword = await bcrypt.checkPassword(password, userInfo.password);
       if (truePassword) {
         const data = {
           id: userInfo.id,
           email: userInfo.email,
-          firstname: userInfo.firstname,
-          lastname: userInfo.lastname,
+          firstName: userInfo.firstname,
+          lastName: userInfo.lastname,
         };
         const token = await jwt.makeToken(data);
-        res.status(200).json({
-          status: 200,
-          data: {
-            token,
-          },
+        response.success(res, 200, {
+          token,
         });
       } else {
-        res.status(401).json({
-          status: 401,
-          error: 'Wrong Password',
-        });
+        response.error(res, 401, 'Wrong Password');
       }
     }
   }

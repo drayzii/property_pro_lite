@@ -1,5 +1,6 @@
 import uploadImage from '../helpers/cloudinary';
 import schema from '../schema/schema';
+import response from '../helpers/responses';
 
 
 class property {
@@ -7,30 +8,32 @@ class property {
     const {
       type, state, city, address, price,
     } = req.body;
+    parseInt(price, 10);
     let image;
-    if (req.files) {
-      if (process.env.NODE_ENV !== 'test') {
-        const file = req.files.photo;
-        image = await uploadImage(file.tempFilePath);
-        if (!image) {
-          res.status(500).json({
-            status: 500,
-            error: 'Could not upload image',
-          });
-        } else {
-          const addedProperty = await schema.addProperty([
-            req.user.id,
-            price,
-            state,
-            city,
-            address,
-            type,
-            image.url,
-          ], true);
-          if (addedProperty) {
-            res.status(201).json({
-              status: 201,
-              data: {
+    const checkProperty = await schema.checkProperty([
+      price,
+      address,
+      type,
+    ]);
+    if (!checkProperty) {
+      if (req.files) {
+        if (process.env.NODE_ENV !== 'test') {
+          const file = req.files.photo;
+          image = await uploadImage(file.tempFilePath);
+          if (!image) {
+            response.error(res, 500, 'Could not upload image');
+          } else {
+            const addedProperty = await schema.addProperty([
+              req.user.id,
+              price,
+              state,
+              city,
+              address,
+              type,
+              image.url,
+            ], true);
+            if (addedProperty) {
+              response.success(res, 201, {
                 id: addedProperty.id,
                 status: addedProperty.status,
                 type: addedProperty.type,
@@ -40,36 +43,33 @@ class property {
                 price: addedProperty.price,
                 created_on: addedProperty.createdon,
                 image_url: addedProperty.image_url,
-              },
-            });
+              });
+            }
           }
-        }
-      } 
-    } else {
-      let addedProperty;
-      if (process.env.NODE_ENV === 'test') {
-        addedProperty = await schema.addProperty([
-          1,
-          price,
-          state,
-          city,
-          address,
-          type,
-        ], false);
+        } 
       } else {
-        addedProperty = await schema.addProperty([
-          req.user.id,
-          price,
-          state,
-          city,
-          address,
-          type,
-        ], false);
-      }
-      if (addedProperty) {
-        res.status(201).json({
-          status: 201,
-          data: {
+        let addedProperty;
+        if (process.env.NODE_ENV === 'test') {
+          addedProperty = await schema.addProperty([
+            1,
+            price,
+            state,
+            city,
+            address,
+            type,
+          ], false);
+        } else {
+          addedProperty = await schema.addProperty([
+            req.user.id,
+            price,
+            state,
+            city,
+            address,
+            type,
+          ], false);
+        }
+        if (addedProperty) {
+          response.success(res, 201, {
             id: addedProperty.id,
             status: addedProperty.status,
             type: addedProperty.type,
@@ -78,14 +78,13 @@ class property {
             address: addedProperty.address,
             price: addedProperty.price,
             created_on: addedProperty.createdon,
-          },
-        });
-      } else {
-        res.status(500).json({
-          status: 500,
-          error: 'Error adding the property',
-        });
+          });
+        } else {
+          response.error(res, 500, 'Error adding the property');
+        }
       }
+    } else {
+      response.error(res, 409, 'Property already exists');
     }
   }
 
@@ -94,29 +93,21 @@ class property {
     const {
       type, state, city, address, price,
     } = req.body;
+    parseInt(price, 10);
     let image;
     const propertyInfo = await schema.getProperty([id]);
     if (!propertyInfo) {
-      res.status(404).json({
-        status: 404,
-        error: 'Property not found',
-      });
+      response.error(res, 404, 'Property not found');
     } else {
       if (propertyInfo.owner !== req.user.id) {
-        res.status(403).json({
-          status: 403,
-          error: 'You can not edit this property',
-        });
+        response.error(res, 403, 'You can not edit this property');
       } else {
         if (req.files) {
           if (process.env.NODE_ENV !== 'test') {
             const file = req.files.photo;
             image = await uploadImage(file.tempFilePath);
             if (!image) {
-              res.status(500).json({
-                status: 500,
-                error: 'Could not upload image',
-              });
+              response.error(res, 500, 'Could not upload image');
             } else {
               const updatedProperty = await schema.updateProperty([
                 price,
@@ -128,25 +119,19 @@ class property {
                 id,
               ], true);
               if (updatedProperty) {
-                res.status(202).json({
-                  status: 202,
-                  data: {
-                    id: updatedProperty.id,
-                    status: updatedProperty.status,
-                    type: updatedProperty.type,
-                    state: updatedProperty.state,
-                    city: updatedProperty.city,
-                    address: updatedProperty.address,
-                    price: updatedProperty.price,
-                    created_on: updatedProperty.createdOn,
-                    image_url: updatedProperty.image_url,
-                  },
+                response.success(res, 201, {
+                  id: updatedProperty.id,
+                  status: updatedProperty.status,
+                  type: updatedProperty.type,
+                  state: updatedProperty.state,
+                  city: updatedProperty.city,
+                  address: updatedProperty.address,
+                  price: updatedProperty.price,
+                  created_on: updatedProperty.createdOn,
+                  image_url: updatedProperty.image_url,
                 });
               } else {
-                res.status(500).json({
-                  status: 500,
-                  error: 'Error updating the property',
-                });
+                response.error(res, 500, 'Error updating the property');
               }
             } 
           } 
@@ -160,25 +145,19 @@ class property {
             id,
           ], false);
           if (updatedProperty) {
-            res.status(202).json({
-              status: 202,
-              data: {
-                id: updatedProperty.id,
-                status: updatedProperty.status,
-                type: updatedProperty.type,
-                state: updatedProperty.state,
-                city: updatedProperty.city,
-                address: updatedProperty.address,
-                price: updatedProperty.price,
-                created_on: updatedProperty.createdOn,
-                image_url: updatedProperty.imageUrl,
-              },
+            response.success(res, 202, {
+              id: updatedProperty.id,
+              status: updatedProperty.status,
+              type: updatedProperty.type,
+              state: updatedProperty.state,
+              city: updatedProperty.city,
+              address: updatedProperty.address,
+              price: updatedProperty.price,
+              created_on: updatedProperty.createdOn,
+              image_url: updatedProperty.imageUrl,
             });
           } else {
-            res.status(500).json({
-              status: 500,
-              error: 'Error updating the property',
-            });
+            response.error(res, 500, 'Error updating the property');
           }
         }
       }
@@ -189,57 +168,14 @@ class property {
     const id = parseInt(req.params.id, 10);
     const propertyInfo = await schema.getProperty([id]);
     if (!propertyInfo) {
-      res.status(404).json({
-        status: 404,
-        error: 'Property not found',
-      });
+      response.error(res, 404, 'Property not found');
     } else {
       if (propertyInfo.owner !== req.user.id) {
-        res.status(403).json({
-          status: 403,
-          error: 'You can not edit this property',
-        });
+        response.error(res, 403, 'You can not edit this property');
       } else {
         const theProperty = await schema.markAsSold([id]);
         if (theProperty) {
-          res.status(202).json({
-            status: 202,
-            data: {
-              id: theProperty.id,
-              status: theProperty.status,
-              type: theProperty.type,
-              state: theProperty.state,
-              city: theProperty.city,
-              address: theProperty.address,
-              price: theProperty.price,
-              created_on: theProperty.createdOn,
-              image_url: theProperty.image_url,
-            },
-          });
-        } else {
-          res.status(500).json({
-            status: 500,
-            error: 'Error marking the property as sold',
-          });
-        }
-      }
-    }
-  }
-
-  static async flag(req, res) {
-    const id = parseInt(req.params.id, 10);
-    const propertyInfo = await schema.getProperty([id]);
-    if (!propertyInfo) {
-      res.status(404).json({
-        status: 404,
-        error: 'Property not found',
-      });
-    } else {
-      const theProperty = await schema.flag([id]);
-      if (theProperty) {
-        res.status(202).json({
-          status: 202,
-          data: {
+          response.success(res, 202, {
             id: theProperty.id,
             status: theProperty.status,
             type: theProperty.type,
@@ -249,13 +185,35 @@ class property {
             price: theProperty.price,
             created_on: theProperty.createdOn,
             image_url: theProperty.image_url,
-          },
+          });
+        } else {
+          response.error(res, 500, 'Error marking the property as sold');
+        }
+      }
+    }
+  }
+
+  static async flag(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const propertyInfo = await schema.getProperty([id]);
+    if (!propertyInfo) {
+      response.error(res, 404, 'Property not found');
+    } else {
+      const theProperty = await schema.flag([id]);
+      if (theProperty) {
+        response.success(res, 202, {
+          id: theProperty.id,
+          status: theProperty.status,
+          type: theProperty.type,
+          state: theProperty.state,
+          city: theProperty.city,
+          address: theProperty.address,
+          price: theProperty.price,
+          created_on: theProperty.createdOn,
+          image_url: theProperty.image_url,
         });
       } else {
-        res.status(500).json({
-          status: 500,
-          error: 'Error flagging the property',
-        });
+        response.error(res, 500, 'Error flagging the property');
       }
     }
   }
@@ -264,27 +222,21 @@ class property {
     const id = parseInt(req.params.id, 10);
     const propertyInfo = await schema.getProperty([id], req.user.isAdmin);
     if (!propertyInfo) {
-      res.status(404).json({
-        status: 404,
-        error: 'Property not found',
-      });
+      response.error(res, 404, 'Property not found');
     } else {
       const userInfo = await schema.getUserByID([propertyInfo.owner]);
-      res.status(200).json({
-        status: 200,
-        data: {
-          id: propertyInfo.id,
-          status: propertyInfo.status,
-          type: propertyInfo.type,
-          state: propertyInfo.state,
-          city: propertyInfo.city,
-          address: propertyInfo.address,
-          price: propertyInfo.price,
-          created_on: propertyInfo.createdOn,
-          image_url: propertyInfo.imageUrl,
-          OwnerEmail: userInfo.email,
-          OwnerPhoneNumber: userInfo.phonenumber,
-        },
+      response.success(res, 200, {
+        id: propertyInfo.id,
+        status: propertyInfo.status,
+        type: propertyInfo.type,
+        state: propertyInfo.state,
+        city: propertyInfo.city,
+        address: propertyInfo.address,
+        price: propertyInfo.price,
+        created_on: propertyInfo.createdOn,
+        image_url: propertyInfo.imageUrl,
+        OwnerEmail: userInfo.email,
+        OwnerPhoneNumber: userInfo.phonenumber,
       });
     }
   }
@@ -294,28 +246,24 @@ class property {
       const { type } = req.query;
       const propertyInfo = await schema.getPropertiesByType([type], req.user.isAdmin);
       if (propertyInfo.length === 0) {
-        res.status(404).json({
-          status: 404,
-          error: 'No Properties found',
-        });
+        response.error(res, 404, 'No Properties found');
       } else {
-        res.status(200).json({
-          status: 200,
-          data: propertyInfo,
-        });
+        response.success(res, 200, propertyInfo);
+      }
+    } else if (req.query.status) {
+      const { status } = req.query;
+      const propertyInfo = await schema.getPropertiesByStatus([status]);
+      if (propertyInfo.length === 0) {
+        response.error(res, 404, 'No Properties found');
+      } else {
+        response.success(res, 200, propertyInfo);
       }
     } else {
       const propertyInfo = await schema.getAllProperties(req.user.isAdmin);
       if (propertyInfo.length === 0) {
-        res.status(404).json({
-          status: 404,
-          error: 'No Properties found',
-        });
+        response.error(res, 404, 'No Properties found');
       } else {
-        res.status(200).json({
-          status: 200,
-          data: propertyInfo,
-        });
+        response.success(res, 200, propertyInfo);
       }
     }
   }
@@ -324,28 +272,16 @@ class property {
     const id = parseInt(req.params.id, 10);
     const propertyInfo = await schema.getProperty([id]);
     if (!propertyInfo) {
-      res.status(404).json({
-        status: 404,
-        error: 'Property not found',
-      });
+      response.error(res, 404, 'Property not found');
     } else {
       if (propertyInfo.owner !== req.user.id) {
-        res.status(403).json({
-          status: 403,
-          error: 'You can not delete this property',
-        });
+        response.error(res, 403, 'You can not delete this property');
       } else {
         const deletedProperty = await schema.deleteProperty([id]);
         if (deletedProperty) {
-          res.status(202).json({
-            status: 202,
-            message: 'Property successfully deleted',
-          });
+          response.success(res, 202, 'Property successfully deleted');
         } else {
-          res.status(500).json({
-            status: 500,
-            error: 'Error deleting the property',
-          });
+          response.error(res, 500, 'Error deleting the property');
         }
       }
     }
