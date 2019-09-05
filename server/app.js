@@ -3,7 +3,6 @@ import bodyparser from 'body-parser';
 import tokenVerify from './config/checkauth';
 import userRoute from './routes/userRoute';
 import propertyRoute from './routes/propertyRoute';
-
 const app = express();
 
 app.use(bodyparser.urlencoded({ extended: false }));
