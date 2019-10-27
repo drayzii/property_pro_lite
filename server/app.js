@@ -2,6 +2,7 @@ import express from 'express';
 import bodyparser from 'body-parser';
 import '@babel/polyfill';
 import swaggerUI from 'swagger-ui-express';
+import cors from 'cors';
 import swaggerDoc from '../doc.json';
 import tokenVerify from './middleware/checkauth';
 import userRoute from './routes/userRoute';
@@ -10,6 +11,7 @@ import response from './helpers/responses';
 
 const app = express();
 
+app.use(cors());
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(express.json());
 
