@@ -227,6 +227,7 @@ class property {
       const userInfo = await schema.getUserByID([propertyInfo.owner]);
       response.success(res, 200, {
         ...propertyInfo,
+        OwnerName: `${userInfo.firstName} ${userInfo.lastName}`,
         OwnerEmail: userInfo.email,
         OwnerPhoneNumber: userInfo.phonenumber,
       });
