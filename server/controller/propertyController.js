@@ -226,15 +226,7 @@ class property {
     } else {
       const userInfo = await schema.getUserByID([propertyInfo.owner]);
       response.success(res, 200, {
-        id: propertyInfo.id,
-        status: propertyInfo.status,
-        type: propertyInfo.type,
-        state: propertyInfo.state,
-        city: propertyInfo.city,
-        address: propertyInfo.address,
-        price: propertyInfo.price,
-        created_on: propertyInfo.createdOn,
-        image_url: propertyInfo.imageUrl,
+        ...propertyInfo,
         OwnerEmail: userInfo.email,
         OwnerPhoneNumber: userInfo.phonenumber,
       });
